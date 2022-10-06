@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Remove</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -32,9 +32,9 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>20</x>
      <y>50</y>
-     <width>221</width>
+     <width>231</width>
      <height>21</height>
     </rect>
    </property>

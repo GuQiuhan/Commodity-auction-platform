@@ -36,4 +36,9 @@ bool Match(QString key,QString content)//用于查询商品的模糊搜索
     return key.contains(content,Qt::CaseInsensitive);//不区分大小写
 }
 
+QString Search::getContent()
+{
+    return content=ui->lineEdit->text();
+}
+
 

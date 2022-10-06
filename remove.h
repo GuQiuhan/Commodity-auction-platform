@@ -14,6 +14,7 @@ class Remove : public QDialog
 public:
     explicit Remove(QWidget *parent = nullptr);
     ~Remove();
+    QString getRemoveContent();
 
 private slots:
     void on_buttonBox_accepted();

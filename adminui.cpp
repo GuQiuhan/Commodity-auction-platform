@@ -16,7 +16,7 @@ extern List<Good> goods;
 extern List<Order> orders;
 
 extern QString content;//全局变量，用来传输搜索框中的内容
-extern QString removeContent;//全局变量，用来传输要删除的用户/商品
+//extern QString removeContent;//全局变量，用来传输要删除的用户/商品
 
 AdminUI::AdminUI(QWidget *parent) :
     QDialog(parent),
@@ -100,7 +100,7 @@ void Search(List<Good>& ans, QString content)
 void AdminUI::checkCommodities()
 {
     QStandardItemModel* model = new QStandardItemModel();
-    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,State").simplified().split(",");
+    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
     Node<Good> * cur=goods.gethead();
@@ -119,9 +119,11 @@ void AdminUI::checkCommodities()
         model->setItem(i,4,item);
         item = new QStandardItem(QString::number(cur->t.getNumber()));
         model->setItem(i,5,item);
+        item = new QStandardItem(cur->t.getDescription());//加入描述
+        model->setItem(i,6,item);
         QString str=cur->t.getState()==1?"On Sale":"Off sale";
         item = new QStandardItem(str);
-        model->setItem(i,6,item);
+        model->setItem(i,7,item);
         cur=cur->next;
     }
 
@@ -202,11 +204,11 @@ void AdminUI::searchCommodities()
 
 
     QStandardItemModel* model = new QStandardItemModel();
-    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,State").simplified().split(",");
+    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
     List<Good> result;
-    Search(result, content);//搜索，结果放在result里面
+    Search(result, s.getContent());//搜索，结果放在result里面
 
     Node<Good> * cur=goods.gethead();
 
@@ -224,9 +226,11 @@ void AdminUI::searchCommodities()
         model->setItem(i,4,item);
         item = new QStandardItem(QString::number(cur->t.getNumber()));
         model->setItem(i,5,item);
+        item = new QStandardItem(cur->t.getDescription());//加入描述
+        model->setItem(i,6,item);
         QString str=cur->t.getState()==1?"On Sale":"Off sale";
         item = new QStandardItem(str);
-        model->setItem(i,6,item);
+        model->setItem(i,7,item);
         cur=cur->next;
     }
 
@@ -240,26 +244,37 @@ void AdminUI::removeCommodities()
     Remove r;
     r.exec();
 
-    if(removeContent!="")//说明不是取消键
+    if(r.getRemoveContent()!="")//说明不是取消键
     {
         //删除商品
         Node<Good>* tmp=goods.gethead();
         bool flag=false;
         for(int i=0; i<goods.getLen(); ++i)
         {
-            if(tmp->t.getID()==removeContent)//找到了要删除的
+            if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
             {
                 flag=true;
                 QMessageBox::StandardButton reply;
                 reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
                 if (reply == QMessageBox::Yes)
                 {
-                    goods.del(i);//删除pos==i的商品
+                    //修改goods
+                    tmp->t.setRemoveState();
+                    //修改users中的卖家
+                    Node<User>* u=users.gethead();
+                    while(u&&u->t.getid()!=tmp->t.getSid()) u=u->next;//找到卖家
+                    u->t.UpdateSellGood(tmp->t);//更新商品信息
+
                     QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
 
                     break;
                 }
                 else break;
+            }
+            else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
+            {
+                flag=true;
+                QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
             }
             tmp=tmp->next;
         }
@@ -276,7 +291,7 @@ void AdminUI::removeUsers()
     Remove r;
     r.exec();
 
-    if(removeContent!="")//说明不是取消键
+    if(r.getRemoveContent()!="")//说明不是取消键
     {
         //删除用户
         Node<User>* tmp=users.gethead();
@@ -285,16 +300,25 @@ void AdminUI::removeUsers()
         {
            // qDebug()<< tmp->t.getid()<< " "<< removeContent<< endl;
 
-            if(tmp->t.getid()==removeContent)//找到了要删除的
+            if(tmp->t.getid()==r.getRemoveContent())//找到了要删除的
             {
                 flag=true;
                 QMessageBox::StandardButton reply;
                 reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
                 if (reply == QMessageBox::Yes)
                 {
-                    users.del(i);//删除pos==i的商品
-                    QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
+                    users.del(i);//删除pos==i的用户
+                    //更新goods文件,下架相应商品
+                    Node<Good>* g=goods.gethead();
+                    while(g)
+                    {
+                        if(g->t.getSid()==tmp->t.getid())
+                        {
+                            g->t.setRemoveState();
+                        }
+                    }
 
+                    QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
 
                 }
                 break;

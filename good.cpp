@@ -3,6 +3,7 @@
 #include <QTime>
 
 extern QString GoodID_now;
+extern List<Good> goods;
 
 Good::Good()
 {
@@ -110,4 +111,11 @@ void Good::operator=(Good const& u)
     this->addDate=u.addDate;
     this->SellerID=u.SellerID;
     this->description=u.description;
+}
+
+
+
+void Good::setRemoveState()
+{
+    this->state=false;
 }

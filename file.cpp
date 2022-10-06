@@ -3,6 +3,9 @@
 extern List<Good> goods;
 extern List<Order> orders;
 extern List<User> users;
+extern QString UserID_now;//只是数字，前面要加上字母
+extern QString GoodID_now;//只是数字，前面要加上字母
+extern QString OrderID_now;//只是数字，前面要加上字母
 
 List<User>  WriteOutUser(const char* path)
 {
@@ -27,6 +30,9 @@ List<User>  WriteOutUser(const char* path)
             string s=buf.substr(0,pos);
             QString id = QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
+
+            //调整全局变量id的初始化
+            if(id.mid(1).toInt()>UserID_now.toInt()) UserID_now=id;
 
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);
@@ -120,6 +126,8 @@ List<Good>  WriteOutGood(const char* path)//传入路径
             QString id = QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
 
+            if(id.mid(1).toInt()>GoodID_now.toInt()) GoodID_now=id;
+
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);
             QString name= QString::fromStdString(s);
@@ -190,6 +198,8 @@ List<Order> WriteOutOrder(const char* path)
             string s=buf.substr(0,pos);
             QString oid = QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
+
+            if(oid.mid(1).toInt()>OrderID_now.toInt()) OrderID_now=oid;
 
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);

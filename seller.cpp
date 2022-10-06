@@ -187,14 +187,14 @@ void Seller::removeCommodities()
     Remove r;
     r.exec();
 
-    if(removeContent!="")//说明不是取消键
+    if(r.getRemoveContent()!="")//说明不是取消键
     {
         //删除商品
         Node<Good>* tmp=this->u.getSellerGood().gethead();
         bool flag=false;
         for(int i=0; i<this->u.getSellerGood().getLen(); ++i)
         {
-            if(tmp->t.getID()==removeContent)//找到了要删除的
+            if(tmp->t.getID()==r.getRemoveContent())//找到了要删除的
             {
                 flag=true;
                 QMessageBox::StandardButton reply;

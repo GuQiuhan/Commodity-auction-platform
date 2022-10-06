@@ -31,9 +31,13 @@ public:
     bool getState();
     QString getDescription();
     void modify(QString name, float price, int number, QString des);
+    //void remove();//包括文件的修改
+    void setRemoveState();//不包括文件的修改
 
     void operator=(Good const& u);
     bool operator==(const Good& u);
+
+
 
 };
 

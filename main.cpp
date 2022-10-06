@@ -14,7 +14,7 @@ using namespace std;
 //全局变量
 QString UserID_now;//只是数字，前面要加上字母
 QString GoodID_now;//只是数字，前面要加上字母
- QString OrderID_now;//只是数字，前面要加上字母
+QString OrderID_now;//只是数字，前面要加上字母
 List<User> users;
 List<Good> goods;
 List<Order> orders;

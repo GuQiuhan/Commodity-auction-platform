@@ -2,10 +2,11 @@
 #include "ui_buyer.h"
 #include "list.h"
 #include "search.h"
+#include "buygood.h"
 #include <QStandardItemModel>
 
 extern List<Good> goods;
-extern QString content;//全局变量，用来传输搜索框中的内容//这里可以改进,用函数调用来解决
+//extern QString content;//全局变量，用来传输搜索框中的内容//这里可以改进,用函数调用来解决
 
 
 Buyer::Buyer(QWidget *parent) :
@@ -36,6 +37,7 @@ void Buyer::on_comboBox_currentTextChanged(const QString &arg1)
     else if(ui->comboBox->currentText()=="Buy Commodities")
     {
         this->buyCommodities();
+       this->checkOrders();//更新订单
     }
     else if(ui->comboBox->currentText()=="Search Commodities")
     {
@@ -47,7 +49,7 @@ void Buyer::on_comboBox_currentTextChanged(const QString &arg1)
     }
     else if(ui->comboBox->currentText()=="Back")
     {
-        //是否要在此时返回数据并保存文件？
+        //返回上一级时将数据实体更新给上一级
         this->close();
     }
 }
@@ -56,14 +58,14 @@ void Buyer::checkCommodities()
 {
 
     QStandardItemModel* model = new QStandardItemModel();
-    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,State").simplified().split(",");
+    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
-    Node<Good> * cur=goods.gethead();
+    Node<Good> * cur=goods.gethead();//买家只能看见所有在售的商品
 
     QStandardItem* item = 0;
     for(int i = 0;i<goods.getLen();++i){
-        if(cur->t.getState()==false) continue;//不在售的商品
+        if(cur->t.getState()==false) continue;//不在售的商品不展示
         item = new QStandardItem(cur->t.getID());//括号里面是QString即可
         model->setItem(i,0,item);
         item = new QStandardItem(cur->t.getName());
@@ -76,14 +78,17 @@ void Buyer::checkCommodities()
         model->setItem(i,4,item);
         item = new QStandardItem(QString::number(cur->t.getNumber()));
         model->setItem(i,5,item);
+        item = new QStandardItem(cur->t.getDescription());//加入描述
+        model->setItem(i,6,item);
         QString str=cur->t.getState()==1?"On Sale":"Off sale";
         item = new QStandardItem(str);
-        model->setItem(i,6,item);
+        model->setItem(i,7,item);
         cur=cur->next;
     }
 
     ui->tableView->setModel(model);
-    ui->tableView->show();
+    ui->tableView->show();  
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
 }
@@ -93,7 +98,7 @@ void Buyer::checkOrders()
     QStringList labels = QObject::trUtf8("Order ID,Commodity ID,Price,Number,Trade Time,Seller ID,Buyer ID").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
-    Node<Order> * cur=this->u.getBuyerOrder().gethead();
+    Node<Order> * cur=this->u.getBuyerOrder().gethead();//买家只能看见自己购买的订单
 
     QStandardItem* item = 0;
     for(int i = 0;i<this->u.getBuyerOrder().getLen();++i){
@@ -117,11 +122,16 @@ void Buyer::checkOrders()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 }
 
 
-void Sear(List<Good>& ans, QString content)
+/**
+ 记录一下这里遇到的问题：
+这里的函数不可以再命名为Search，为了防止和adminui.cpp中的search函数同名同参数而产生重复定义的问题
+**/
+void Sear(List<Good>& ans, QString content)//时刻注意要用引用！
 {
     Node<Good>* cur=goods.gethead();
     for(int i=0; i<goods.getLen(); ++i)
@@ -147,9 +157,9 @@ void Buyer::searchCommodities()
     model->setHorizontalHeaderLabels(labels);
 
     List<Good> result;
-    Sear(result, content);//搜索，结果放在result里面
+    Sear(result, s.getContent());//搜索，结果放在result里面
 
-    Node<Good> * cur=goods.gethead();
+    Node<Good> * cur=result.gethead();
 
     QStandardItem* item = 0;
     for(int i = 0;i<result.getLen();++i){
@@ -173,12 +183,16 @@ void Buyer::searchCommodities()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 }
 
 void Buyer::buyCommodities()
 {
-
+    BuyGood bg;//增加一个抽象层专门用来买商品
+    bg.Init(this->u);
+    bg.exec();
+    this->u=bg.getUser();//更新此数据实体
 }
 
 

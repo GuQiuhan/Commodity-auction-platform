@@ -1,7 +1,7 @@
 #include "search.h"
 #include "ui_search.h"
 
-QString content;//全局变量，用于传输输入的值
+//QString content;//全局变量，用于传输输入的值
 
 Search::Search(QWidget *parent) :
     QDialog(parent),
@@ -18,7 +18,7 @@ Search::~Search()
 
 void Search::on_buttonBox_accepted()
 {
-    content=ui->lineEdit->text();
+    //content=ui->lineEdit->text();
     this->close();
 }
 
@@ -26,7 +26,7 @@ void Search::on_buttonBox_accepted()
 
 void Search::on_buttonBox_rejected()
 {
-    content=ui->lineEdit->text();
+    //content=ui->lineEdit->text();
     this->close();
 }
 
@@ -38,7 +38,7 @@ bool Match(QString key,QString content)//用于查询商品的模糊搜索
 
 QString Search::getContent()
 {
-    return content=ui->lineEdit->text();
+    return ui->lineEdit->text();
 }
 
 

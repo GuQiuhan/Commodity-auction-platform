@@ -26,7 +26,7 @@ void Modify::Init(User& u)//初始化，添加选项
 
     ui->comboBox->addItem("Choose···");
 
-    qDebug()<<u.getSellerGood().getLen();
+    //qDebug()<<u.getSellerGood().getLen();
 
     while(tmp!=NULL)
     {

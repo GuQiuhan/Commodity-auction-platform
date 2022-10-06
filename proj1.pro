@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     adminui.cpp \
     buyer.cpp \
+    buygood.cpp \
     file.cpp \
     good.cpp \
     info.cpp \
@@ -41,6 +42,7 @@ SOURCES += \
 HEADERS += \
     adminui.h \
     buyer.h \
+    buygood.h \
     file.h \
     good.h \
     info.h \
@@ -63,6 +65,7 @@ HEADERS += \
 FORMS += \
     adminui.ui \
     buyer.ui \
+    buygood.ui \
     info.ui \
     launchgood.ui \
     logindlg.ui \

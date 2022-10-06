@@ -15,7 +15,7 @@ extern List<User> users;
 extern List<Good> goods;
 extern List<Order> orders;
 
-extern QString content;//全局变量，用来传输搜索框中的内容
+//extern QString content;//全局变量，用来传输搜索框中的内容
 //extern QString removeContent;//全局变量，用来传输要删除的用户/商品
 
 AdminUI::AdminUI(QWidget *parent) :
@@ -129,7 +129,7 @@ void AdminUI::checkCommodities()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格不允许编辑
 
 
 }
@@ -213,7 +213,7 @@ void AdminUI::searchCommodities()
     List<Good> result;
     Search(result, s.getContent());//搜索，结果放在result里面
 
-    Node<Good> * cur=goods.gethead();
+    Node<Good> * cur=result.gethead();
 
     QStandardItem* item = 0;
     for(int i = 0;i<result.getLen();++i){
@@ -239,7 +239,7 @@ void AdminUI::searchCommodities()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
-
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 void AdminUI::removeCommodities()
 {

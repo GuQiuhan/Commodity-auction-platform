@@ -1,2 +1,2 @@
 userID,username,password,phoneNumber,address,balance,userState
-U002,test2,2,hah,haha,2,inactive
+U001,me1,1,,,0,inactive

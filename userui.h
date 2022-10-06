@@ -20,7 +20,7 @@ class UserUI : public QDialog
 public:
     explicit UserUI(QWidget *parent = nullptr);
     ~UserUI();
-    UserUI(QWidget *parent,User u);//创建含有user实体数据的ui
+    UserUI(QWidget *parent,User& u);//创建含有user实体数据的ui
 
 private slots:
     void on_comboBox_currentTextChanged(const QString &arg1);

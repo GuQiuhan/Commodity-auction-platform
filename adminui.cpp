@@ -129,6 +129,7 @@ void AdminUI::checkCommodities()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
 }
@@ -163,6 +164,7 @@ void AdminUI::checkUsers()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 void AdminUI::checkOrders()
 {
@@ -194,6 +196,7 @@ void AdminUI::checkOrders()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void AdminUI::searchCommodities()

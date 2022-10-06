@@ -21,6 +21,7 @@ public:
     void checkOrders();
     void buyCommodities();
     void searchCommodities();
+    User& getUser();
 
 private slots:
     void on_comboBox_currentTextChanged(const QString &arg1);

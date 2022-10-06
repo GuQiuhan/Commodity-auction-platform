@@ -25,6 +25,9 @@ void Modify::Init(User& u)//初始化，添加选项
     Node<Good>* tmp=u.getSellerGood().gethead();
 
     ui->comboBox->addItem("Choose···");
+
+    qDebug()<<u.getSellerGood().getLen();
+
     while(tmp!=NULL)
     {
         ui->comboBox->addItem(tmp->t.getID());
@@ -56,7 +59,7 @@ void Modify::on_comboBox_currentTextChanged(const QString &arg1)//选择了一�
     }
 }
 
-void Modify::on_pushButton_2_clicked()
+void Modify::on_pushButton_2_clicked()//关闭
 {
     this->close();
 }

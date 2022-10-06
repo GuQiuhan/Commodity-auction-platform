@@ -17,7 +17,7 @@ UserUI::UserUI(QWidget *parent) :
 
 }
 
-UserUI::UserUI(QWidget *parent,User u) :
+UserUI::UserUI(QWidget *parent,User& u) :
     QDialog(parent),
     ui(new Ui::UserUI)
 {
@@ -27,7 +27,7 @@ UserUI::UserUI(QWidget *parent,User u) :
 
     ui->label_2->setText("Hello! "+ user.getName()+"!"); //对全局变量进行显示
 
-
+    //qDebug()<<u.getSellerGood().getLen();
 }
 
 UserUI::~UserUI()
@@ -51,6 +51,7 @@ void UserUI::on_comboBox_currentTextChanged(const QString &arg1)
         Buyer buyer;//买家ui界面
         buyer.Init(this->user.getName(),this->user);
         buyer.exec();
+        this->user=buyer.getUser();//更新此界面的数据实体
 
     }
     else if(ui->comboBox->currentText()== "Personal Info")

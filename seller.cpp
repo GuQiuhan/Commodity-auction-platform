@@ -39,34 +39,7 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
     if(ui->comboBox->currentText()== "Launch Commodities")
     {
         this->LaunchCommodities();
-       /** LaunchGood l;
-        int res=l.exec();
-        if(res==QDialog::Rejected) l.close();//不发布商品
-        else
-        {
-            while(res==QDialog::Accepted)
-            {
-                if(l.getName()==""||l.getNumber()==0||l.getPrice()<=0)
-                {
-                    //输入不合法
-                    QMessageBox::warning(this, tr("Warning"), tr("Information error!"),QMessageBox::Ok);
-                    res=l.exec();
-                    //清零
-                }
-                else
-                {
-                    break;
-
-                }
-
-            }
-
-            Good tmp(l.getName(),l.getPrice(),l.getNumber(),l.getDescription(),u.getid());
-            u.addGood(tmp);//更新ui界面中的实体数据用户
-            goods.push_back(tmp);//加入商品txt
-            users.update(u);//更新用户链表
-            QMessageBox::information(this, "Title", "Launch Successfully!");//提示成功
-        }**/
+        this->checkCommodities();
 
     }
     else if(ui->comboBox->currentText()== "Check My Commodities")
@@ -76,26 +49,8 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
     }
     else if(ui->comboBox->currentText()== "Modify My Commodities")
     {
-        /**Modify m;
-        //qDebug()<<"here!" << endl;
-        m.Init(this->u);
-        int res=m.exec();
-        if(res==QDialog::Rejected) m.close();//不发布商品
-        else
-        {
-            Node<Good> * tmp=u.getSellerGood().gethead();
-            while(tmp)
-            {
-                if(tmp->t.getID()==m.getID()) break;
-                tmp=tmp->next;
-            }
-            //更新相应的数据实体
-            tmp->t.modify(m.getName(),m.getPrice(),m.getNumber(),m.getDescription());
-            this->u.UpdateSellGood(tmp->t);
-            goods.update(tmp->t);
-        }
-**/
         this->ModifyCommodities();
+        this->checkCommodities();//modify之后重新check
     }
     else if(ui->comboBox->currentText()== "Remove Commodities")
     {
@@ -181,6 +136,7 @@ void Seller::checkCommodities()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
 }
@@ -192,6 +148,8 @@ void Seller::checkOrders()
     model->setHorizontalHeaderLabels(labels);
 
     Node<Order> * cur=this->u.getSellerOrder().gethead();
+
+    //qDebug()<<this->u.getSellerGood().getLen()<< endl;
 
     QStandardItem* item = 0;
     for(int i = 0;i<this->u.getSellerOrder().getLen();++i){
@@ -215,6 +173,7 @@ void Seller::checkOrders()
 
     ui->tableView->setModel(model);
     ui->tableView->show();
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
@@ -273,7 +232,7 @@ void Seller::ModifyCommodities()
     //qDebug()<<"here!" << endl;
     m.Init(this->u);
     int res=m.exec();
-    if(res==QDialog::Rejected) m.close();//不发布商品
+    if(res==QDialog::Rejected) m.close();//不修改商品
     else
     {
         Node<Good> * tmp=u.getSellerGood().gethead();
@@ -282,9 +241,12 @@ void Seller::ModifyCommodities()
             if(tmp->t.getID()==m.getID()) break;
             tmp=tmp->next;
         }
-        //更新相应的数据实体
+        //更新数据实体
         tmp->t.modify(m.getName(),m.getPrice(),m.getNumber(),m.getDescription());
         this->u.UpdateSellGood(tmp->t);
+        //修改users
+        users.update(this->u);
+        //修改goods
         goods.update(tmp->t);
     }
 }

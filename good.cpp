@@ -13,7 +13,7 @@ Good::Good()
 Good::Good(const QString id,const QString na, const float p, const int n,const QString d, const QString sellerid,const QString ad,const bool s)
 {
     this->ID=id;
-    this->name=n;
+    this->name=na;
     this->price=p;
     this->state=s;
     this->number=n;

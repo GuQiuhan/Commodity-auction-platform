@@ -180,3 +180,9 @@ void Buyer::buyCommodities()
 {
 
 }
+
+
+User& Buyer::getUser()
+{
+    return this->u;
+}

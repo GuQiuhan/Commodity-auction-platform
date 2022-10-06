@@ -70,6 +70,9 @@ List<User>  WriteOutUser(const char* path)
                 else if(x->t.getID()==id) tmp.addBuyGood(x->t);//买的商品
                 x=x->next;
             }
+
+            //qDebug()<<name << tmp.getSellerGood().getLen();
+
             Node<Order>* y=orders.gethead();
             while(y!=NULL)
             {
@@ -128,10 +131,13 @@ List<Good>  WriteOutGood(const char* path)//传入路径
 
             if(id.mid(1).toInt()>GoodID_now.toInt()) GoodID_now=id;
 
+            //cout << buf <<endl;
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);
             QString name= QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
+
+            //qDebug() << name << endl;
 
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);

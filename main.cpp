@@ -37,9 +37,10 @@ int main(int argc, char *argv[])
     char* good_path=(char *)"/Users/pro/Desktop/proj1/good.txt";//待创建
     char* order_path=(char *)"/Users/pro/Desktop/proj1/order.txt";//待创建
 
-    users=WriteOutUser(user_path); // 用于存储用户文件
+    //一定要先读goods和orders文件,因为创建users的时候也需要用到读好的前两个文件
     goods=WriteOutGood(good_path); //用于存储商品文件
     orders=WriteOutOrder(order_path); ; //用于存储订单文件
+    users=WriteOutUser(user_path); // 用于存储用户文件
 
 
     dlg.exec();

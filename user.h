@@ -20,7 +20,6 @@ private:
     float balance;//保留一位小数
     bool state;//0表示inactive，1表示active
 
-
     List<Good> sell;//作为卖家售卖的商品
     List<Good> buy;//作为买家买的商品
     List<Order> sellOrder;//作为卖家的订单
@@ -52,6 +51,9 @@ public:
     bool operator==(const User& u);
 
     void addGood(Good& tmp);//新发布商品
+    void addBuyGood(Good& tmp);//新买的商品
+    void addBuyOrder(Order& tmp);//新买的订单
+    void addSellOrder(Order& tmp);//新卖的订单
 
     List<Good>& getSellerGood();
     List<Good>& getBuyerGood();

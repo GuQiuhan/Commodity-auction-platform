@@ -155,6 +155,20 @@ void User::addGood(Good& tmp)//新发布商品
     sell.push_back(tmp);
 }
 
+void User::addBuyGood(Good& tmp)//新买的商品
+{
+    this->buy.push_back(tmp);
+}
+
+void User::addBuyOrder(Order& tmp)//新买的订单
+{
+    this->buyOrder.push_back(tmp);
+}
+void User::addSellOrder(Order& tmp)//新卖的订单
+{
+    this->sellOrder.push_back(tmp);
+}
+
 void User::UpdateSellGood(Good& g)
 {
     this->sell.update(g);

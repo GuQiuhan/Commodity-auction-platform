@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdminUI</class>
+ <widget class="QDialog" name="AdminUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>630</width>
+    <height>454</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Administrator</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>18</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(128, 0, 2);</string>
+   </property>
+   <property name="text">
+    <string>Hello! Administrator!</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>10</y>
+     <width>201</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Choose···</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Check Orders</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Check Users</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Check Commodities</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Search Commodities</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Remove Commodities</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Remove Users</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Log Out</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>611</width>
+     <height>371</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

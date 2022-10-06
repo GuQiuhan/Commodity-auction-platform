@@ -51,6 +51,7 @@ void UserUI::on_comboBox_currentTextChanged(const QString &arg1)
         Buyer buyer;//买家ui界面
         buyer.Init(this->user.getName(),this->user);
         buyer.exec();
+        this->user=buyer.getUser();//更新此界面的数据实体
 
     }
     else if(ui->comboBox->currentText()== "Personal Info")

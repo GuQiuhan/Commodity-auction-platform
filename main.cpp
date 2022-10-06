@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     GoodID_now="000";
     OrderID_now="000";
 
-    //以下文件存储路径可以修改
+    //TODO: 以下文件存储路径需要根据实际环境修改
     char* user_path=(char *)"/Users/pro/Desktop/proj1/user.txt";
     char* good_path=(char *)"/Users/pro/Desktop/proj1/good.txt";//待创建
     char* order_path=(char *)"/Users/pro/Desktop/proj1/order.txt";//待创建

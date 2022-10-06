@@ -24,7 +24,7 @@ Seller::~Seller()
     delete ui;
 }
 
-void Seller::Init(QString name,User u)
+void Seller::Init(QString name,User& u)
 {
     ui->label->setText(name +" as a SELLER:");
     this->u=u;
@@ -38,7 +38,8 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
 **/
     if(ui->comboBox->currentText()== "Launch Commodities")
     {
-        LaunchGood l;
+        this->LaunchCommodities();
+       /** LaunchGood l;
         int res=l.exec();
         if(res==QDialog::Rejected) l.close();//不发布商品
         else
@@ -65,7 +66,7 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
             goods.push_back(tmp);//加入商品txt
             users.update(u);//更新用户链表
             QMessageBox::information(this, "Title", "Launch Successfully!");//提示成功
-        }
+        }**/
 
     }
     else if(ui->comboBox->currentText()== "Check My Commodities")
@@ -75,7 +76,7 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
     }
     else if(ui->comboBox->currentText()== "Modify My Commodities")
     {
-        Modify m;
+        /**Modify m;
         //qDebug()<<"here!" << endl;
         m.Init(this->u);
         int res=m.exec();
@@ -93,7 +94,8 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
             this->u.UpdateSellGood(tmp->t);
             goods.update(tmp->t);
         }
-
+**/
+        this->ModifyCommodities();
     }
     else if(ui->comboBox->currentText()== "Remove Commodities")
     {
@@ -114,10 +116,43 @@ void Seller::on_comboBox_currentTextChanged(const QString &arg1)
 
 }
 
+void Seller::LaunchCommodities()
+{
+    LaunchGood l;
+    int res=l.exec();
+    if(res==QDialog::Rejected) l.close();//不发布商品
+    else
+    {
+        while(res==QDialog::Accepted)
+        {
+            if(l.getName()==""||l.getNumber()==0||l.getPrice()<=0)
+            {
+                //输入不合法
+                QMessageBox::warning(this, tr("Warning"), tr("Information error!"),QMessageBox::Ok);
+                res=l.exec();
+                //清零
+            }
+            else
+            {
+                break;
+
+            }
+
+        }
+
+        Good tmp(l.getName(),l.getPrice(),l.getNumber(),l.getDescription(),u.getid());
+        u.addGood(tmp);//更新ui界面中的实体数据用户
+        goods.push_back(tmp);//加入商品txt
+        users.update(u);//更新用户链表
+        QMessageBox::information(this, "Title", "Launch Successfully!");//提示成功
+    }
+
+}
+
 void Seller::checkCommodities()
 {
     QStandardItemModel* model = new QStandardItemModel();
-    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,State").simplified().split(",");
+    QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
     Node<Good> * cur=this->u.getSellerGood().gethead();
@@ -136,9 +171,11 @@ void Seller::checkCommodities()
         model->setItem(i,4,item);
         item = new QStandardItem(QString::number(cur->t.getNumber()));
         model->setItem(i,5,item);
+        item = new QStandardItem(cur->t.getDescription());
+        model->setItem(i,6,item);
         QString str=cur->t.getState()==1?"On Sale":"Off sale";
         item = new QStandardItem(str);
-        model->setItem(i,6,item);
+        model->setItem(i,7,item);
         cur=cur->next;
     }
 
@@ -194,20 +231,31 @@ void Seller::removeCommodities()
         bool flag=false;
         for(int i=0; i<this->u.getSellerGood().getLen(); ++i)
         {
-            if(tmp->t.getID()==r.getRemoveContent())//找到了要删除的
+            if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
             {
                 flag=true;
                 QMessageBox::StandardButton reply;
                 reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
                 if (reply == QMessageBox::Yes)
                 {
-                    //在每个文件中显示下架，但不删除
-                    //待写···
+                    //更新数据实体
+                    tmp->t.setRemoveState();
+                    //更新users
+                    users.update(this->u);
+                    //更新goods
+                    Node<Good>* x=goods.gethead();
+                    while(x&&x->t.getID()!=tmp->t.getID()) x=x->next;
+                    if(x) x->t.setRemoveState();//找到相应商品并下架,一般都能找到
                     QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
 
                     break;
                 }
                 else break;
+            }
+            else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
+            {
+                flag=true;
+                QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
             }
             tmp=tmp->next;
         }
@@ -219,4 +267,30 @@ void Seller::removeCommodities()
     }
 }
 
+void Seller::ModifyCommodities()
+{
+    Modify m;
+    //qDebug()<<"here!" << endl;
+    m.Init(this->u);
+    int res=m.exec();
+    if(res==QDialog::Rejected) m.close();//不发布商品
+    else
+    {
+        Node<Good> * tmp=u.getSellerGood().gethead();
+        while(tmp)
+        {
+            if(tmp->t.getID()==m.getID()) break;
+            tmp=tmp->next;
+        }
+        //更新相应的数据实体
+        tmp->t.modify(m.getName(),m.getPrice(),m.getNumber(),m.getDescription());
+        this->u.UpdateSellGood(tmp->t);
+        goods.update(tmp->t);
+    }
+}
 
+
+User& Seller::getUser()
+{
+    return this->u;
+}

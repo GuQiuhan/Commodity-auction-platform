@@ -42,6 +42,7 @@ void User::operator=(User const& u)//赋值构造函数，有用！
     this->pwd=u.pwd;
     this->addr=u.addr;
     this->name=u.name;
+    this->phoneNum=u.phoneNum;
     this->state=u.state;
     this->balance=u.balance;
     this->sell=u.sell;

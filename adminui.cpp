@@ -262,8 +262,8 @@ void AdminUI::removeCommodities()
                     tmp->t.setRemoveState();
                     //修改users中的卖家
                     Node<User>* u=users.gethead();
-                    while(u&&u->t.getid()!=tmp->t.getSid()) u=u->next;//找到卖家
-                    u->t.UpdateSellGood(tmp->t);//更新商品信息
+                    while(u&&u->t.getid()!=tmp->t.getSid()) u=u->next;//找到卖家,一般都能找到
+                    if(u) u->t.UpdateSellGood(tmp->t);//更新商品信息
 
                     QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
 
@@ -316,6 +316,7 @@ void AdminUI::removeUsers()
                         {
                             g->t.setRemoveState();
                         }
+                        g=g->next;
                     }
 
                     QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功

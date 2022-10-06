@@ -16,18 +16,21 @@ class Seller : public QDialog
 public:
     explicit Seller(QWidget *parent = nullptr);
     ~Seller();
-    void Init(QString name,User u);
+    void Init(QString name,User& u);
 
     void checkCommodities();
     void checkOrders();
     void removeCommodities();
+    void LaunchCommodities();
+    void ModifyCommodities();
+    User& getUser();
 
 private slots:
     void on_comboBox_currentTextChanged(const QString &arg1);
 
 private:
     Ui::Seller *ui;
-    User u;
+    User u;//数据实体
 };
 
 #endif // SELLER_H

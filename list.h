@@ -130,7 +130,7 @@ public:
         tmp->next=NULL;//创建一个节点
 
 
-        if(tail==NULL) //链表为空
+        if(head==NULL) //链表为空
         {
             head=tmp;
             tail=head;
@@ -152,14 +152,21 @@ public:
 
     void update(T& t)//找到t并更新t，需要在三个类里增加等于操作符重载函数！！
     {
+        //qDebug()<<"into update "<<endl;
+
         Node<T>* tmp=head;
+
         while(tmp!=NULL)
         {
+            //tmp->t.Print();
             if(tmp->t==t)//找到t，需要对每个模版t重载等于操作符！！
                 break;
+            tmp=tmp->next;//救命！！！这个bug卡了我一个小时！！一定要记得移动指针啊！
         }
+
         if(tmp!=NULL)//在此程序中一般都应该能找到
         {
+           // qDebug()<<"change list here" <<endl;
             tmp->t=t;//替换
         }
 

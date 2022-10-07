@@ -7,6 +7,7 @@ Recharge::Recharge(QWidget *parent) :
     ui(new Ui::Recharge)
 {
     ui->setupUi(this);
+    ui->doubleSpinBox->setMaximum(1000000);//设置最大充值值
 }
 
 Recharge::~Recharge()

@@ -139,7 +139,7 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
             tmp=tmp->next;
         }
         //检查余额是否够
-        if(tmp->t.getprice()*ui->spinBox->value()<this->u.getBal())
+        if(tmp->t.getprice()*ui->spinBox->value()>this->u.getBal())
         {
             QMessageBox::warning(this, tr("Warning"), tr("Balance not enough!"),QMessageBox::Ok);
         }
@@ -149,6 +149,7 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
             //修改商品数量goods
             //此处已经保证了数量是一定够的
             tmp->t.decrease(ui->spinBox->value());
+
             //修改orders
             Order o(tmp->t.getID(),tmp->t.getprice(),ui->spinBox->value(),tmp->t.getSid(),this->u.getid());
             orders.push_back(o);
@@ -168,6 +169,35 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
             s->t.addSellOrder(o);
             s->t.inreaseBal(tmp->t.getprice()*ui->spinBox->value());
 
+
+            if(tmp->t.getNumber()==0)//商品被买光了，要下架
+            {
+                //修改user
+                s->t.delGood(tmp->t);
+                users.update(u);
+                //修改goods
+                Node<Good> *g=goods.gethead();
+                int i=0;
+                for(; i<goods.getLen();g=g->next,i++)
+                {
+                    if(g->t==tmp->t) break;
+                }
+                goods.del(i);
+
+            }
+
+            //如果买的是自己的东西
+            if(s->t.getid()==this->u.getid())
+            {
+                this->u.inreaseBal(tmp->t.getprice()*ui->spinBox->value());//本数据实体余额也要增加
+                if(tmp->t.getNumber()==0)//商品被买光了，要下架
+                {
+                    //修改本数据实体
+                    this->u.delGood(tmp->t);
+
+                }
+            }
+            QMessageBox::information(this, "Title", "Buy Success!");//提示成功
             ui->balance->setText("Your balance: "+QString("%1").arg(u.getBal()));//重新展示余额
         }
         this->checkCommodities();//重新展示商品
@@ -178,4 +208,9 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
 
 
     }
+}
+
+void BuyGood::on_pushButton_clicked()
+{
+    this->close();
 }

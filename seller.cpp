@@ -242,6 +242,7 @@ void Seller::ModifyCommodities()
             tmp=tmp->next;
         }
         //更新数据实体
+
         tmp->t.modify(m.getName(),m.getPrice(),m.getNumber(),m.getDescription());
         this->u.UpdateSellGood(tmp->t);
         //修改users

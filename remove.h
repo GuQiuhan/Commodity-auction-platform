@@ -15,6 +15,7 @@ public:
     explicit Remove(QWidget *parent = nullptr);
     ~Remove();
     QString getRemoveContent();
+    bool getFlag();
 
 private slots:
     void on_buttonBox_accepted();
@@ -23,6 +24,7 @@ private slots:
 
 private:
     Ui::Remove *ui;
+    bool flag;
 };
 
 #endif // REMOVE_H

@@ -16,16 +16,23 @@ Remove::~Remove()
 
 void Remove::on_buttonBox_accepted()
 {
+    flag=true;
     //removeContent=ui->lineEdit->text();
     this->close();
 }
 
 void Remove::on_buttonBox_rejected()
 {
+    flag=false;
     this->close();
 }
 
 QString Remove::getRemoveContent()
 {
     return ui->lineEdit->text();
+}
+
+bool Remove::getFlag()
+{
+    return flag;
 }

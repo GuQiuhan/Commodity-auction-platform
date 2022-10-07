@@ -61,7 +61,30 @@ void UserUI::on_comboBox_currentTextChanged(const QString &arg1)
         info.exec();
         this->user.UpdateInfo(info.getName(),info.getAddr(),info.getContact(),info.getBal());//对本界面的数据实体更新
         //更新users
-        users.update(user);
+        //qDebug() << "hereinfo"<<endl;
+        //qDebug()<<user.getid()<<endl;
+
+        //debug:展示users的内容
+        /**Node<User>* de=users.gethead();
+        while(de)
+        {
+            qDebug()<<de->t.getid();
+            qDebug()<<de->t.getName();
+            de=de->next;
+        }**/
+
+        users.update(this->user);
+
+        //debug:再次展示users的内容
+        /** de=users.gethead();
+        while(de)
+        {
+            qDebug()<<de->t.getid();
+            qDebug()<<de->t.getName();
+            de=de->next;
+        }**/
+
+        //qDebug()<<user.getid()<<endl;
 
     }
     else if(ui->comboBox->currentText()== "Log Out")

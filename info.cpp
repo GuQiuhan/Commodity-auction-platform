@@ -2,6 +2,7 @@
 #include "ui_info.h"
 #include <QMessageBox>
 #include "recharge.h"
+extern List<User> users;
 
 Info::Info(QWidget *parent) :
     QDialog(parent),
@@ -52,7 +53,7 @@ void Info::on_pushButton_2_clicked()//recharge
 
         ui->balance->setText(QString("%2").arg(newBal));
         //将数据返回userui
-        //待写
+        //数据的更新在userui.cpp中
 
     }
 

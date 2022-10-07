@@ -1,6 +1,7 @@
 #ifndef GOOD_H
 #define GOOD_H
 #include <QString>
+#include <QDebug>
 using namespace std;
 
 
@@ -38,6 +39,7 @@ public:
     void operator=(Good const& u);
     bool operator==(const Good& u);
 
+    void Print(){qDebug()<<this->ID;}
 
 
 };

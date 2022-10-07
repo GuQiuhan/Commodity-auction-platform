@@ -50,6 +50,7 @@ public:
     void operator=(User const& u);
     bool operator==(const User& u);
 
+    void delGood(Good& tmp);//商品卖光了要删除
     void addGood(Good& tmp);//新发布商品
     void addBuyGood(Good& tmp);//新买的商品
     void addBuyOrder(Order& tmp);//新买的订单
@@ -65,6 +66,8 @@ public:
 
     void decreaseBal(float num);//买东西余额减少
     void inreaseBal(float num);//余额增加
+
+    void Print(){qDebug()<<this->ID;}
 
 
 };

@@ -2,6 +2,7 @@
 #include <QString>
 #include <QDebug>
 extern QString UserID_now;
+extern List<Good> goods;
 
 
 User::User(const QString n, const QString p)//用于register
@@ -148,6 +149,19 @@ User::User(const User& u)
     this->name=u.name;
     this->state=u.state;
     this->balance=u.balance;
+
+}
+
+void User::delGood(Good& tmp)//商品卖光了要删除
+{
+    Node<Good> *g=this->getSellerGood().gethead();
+    int i=0;
+    for(; i<getSellerGood().getLen();g=g->next,i++)
+    {
+        if(g->t==tmp) break;
+    }
+
+    this->getSellerGood().del(i);
 
 }
 

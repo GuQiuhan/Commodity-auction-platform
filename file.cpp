@@ -32,7 +32,11 @@ List<User>  WriteOutUser(const char* path)
             buf.erase(0,pos+delimiter.length());
 
             //调整全局变量id的初始化
-            if(id.mid(1).toInt()>UserID_now.toInt()) UserID_now=id;
+            if(id.mid(1).toInt()>UserID_now.toInt())
+            {
+                UserID_now=id.mid(1);
+                //qDebug()<<"change:"<< UserID_now<<endl;
+            }
 
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);
@@ -315,8 +319,8 @@ void WriteInGood(const char* path)
         fout <<tmp->t.getDescription().toStdString()<<",";
         fout << tmp->t.getSid().toStdString()<<",";
         fout << tmp->t.getDate().toStdString()<<",";
-        if(tmp->t.getState()) fout<< "On Sale";
-        else fout<<"Off Sale";
+        if(tmp->t.getState()) fout<< "1";//good文件中以0/1存储状态
+        else fout<<"0";
         //fout <<endl;
 
         //保证最后一行没有回车符,即最后光标停留在最后一行的最后!!否则读文件会出错

@@ -2,6 +2,7 @@
 #define ORDER_H
 
 #include <QString>
+#include <QDebug>
 
 
 class Order
@@ -31,6 +32,8 @@ public:
     QString getBid();
 
     void operator=(Order const& u);
+
+    void Print(){}
 
 };
 

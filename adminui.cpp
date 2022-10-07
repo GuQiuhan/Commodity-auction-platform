@@ -294,46 +294,49 @@ void AdminUI::removeUsers()
     Remove r;
     r.exec();
 
-    if(r.getRemoveContent()!="")//说明不是取消键
+    if(r.getFlag())
     {
-        //删除用户
-        Node<User>* tmp=users.gethead();
-        bool flag=false;
-        for(int i=0; i<users.getLen(); ++i)
+        if(r.getRemoveContent()!="")//说明不是取消键
         {
-           // qDebug()<< tmp->t.getid()<< " "<< removeContent<< endl;
-
-            if(tmp->t.getid()==r.getRemoveContent())//找到了要删除的
+            //删除用户
+            Node<User>* tmp=users.gethead();
+            bool flag=false;
+            for(int i=0; i<users.getLen(); ++i)
             {
-                flag=true;
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
-                if (reply == QMessageBox::Yes)
+               // qDebug()<< tmp->t.getid()<< " "<< removeContent<< endl;
+
+                if(tmp->t.getid()==r.getRemoveContent())//找到了要删除的
                 {
-                    users.del(i);//删除pos==i的用户
-                    //更新goods文件,下架相应商品
-                    Node<Good>* g=goods.gethead();
-                    while(g)
+                    flag=true;
+                    QMessageBox::StandardButton reply;
+                    reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
+                    if (reply == QMessageBox::Yes)
                     {
-                        if(g->t.getSid()==tmp->t.getid())
+                        users.del(i);//删除pos==i的用户
+                        //更新goods文件,下架相应商品
+                        Node<Good>* g=goods.gethead();
+                        while(g)
                         {
-                            g->t.setRemoveState();
+                            if(g->t.getSid()==tmp->t.getid())
+                            {
+                                g->t.setRemoveState();
+                            }
+                            g=g->next;
                         }
-                        g=g->next;
+
+                        QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
+
                     }
-
-                    QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
-
+                    break;
                 }
-                break;
+
+                tmp=tmp->next;
             }
 
-            tmp=tmp->next;
-        }
-
-        if(!flag)
-        {
-            QMessageBox::warning(this, tr("Warning"), tr("The User ID doesn't exist!"),QMessageBox::Ok);
+            if(!flag)
+            {
+                QMessageBox::warning(this, tr("Warning"), tr("The User ID doesn't exist!"),QMessageBox::Ok);
+            }
         }
     }
 }

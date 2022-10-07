@@ -201,7 +201,7 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
             ui->balance->setText("Your balance: "+QString("%1").arg(u.getBal()));//重新展示余额
         }
         this->checkCommodities();//重新展示商品
-        ui->spinBox->clear();//清空选项
+        ui->spinBox->setValue(0);//清空选项
         ui->comboBox->setCurrentIndex(0);
 
 

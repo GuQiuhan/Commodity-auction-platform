@@ -247,44 +247,47 @@ void AdminUI::removeCommodities()
     Remove r;
     r.exec();
 
-    if(r.getRemoveContent()!="")//说明不是取消键
+    if(r.getFlag())
     {
-        //删除商品
-        Node<Good>* tmp=goods.gethead();
-        bool flag=false;
-        for(int i=0; i<goods.getLen(); ++i)
+        if(r.getRemoveContent()!="")//说明不是取消键
         {
-            if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
+            //删除商品
+            Node<Good>* tmp=goods.gethead();
+            bool flag=false;
+            for(int i=0; i<goods.getLen(); ++i)
             {
-                flag=true;
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
-                if (reply == QMessageBox::Yes)
+                if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
                 {
-                    //修改goods
-                    tmp->t.setRemoveState();
-                    //修改users中的卖家
-                    Node<User>* u=users.gethead();
-                    while(u&&u->t.getid()!=tmp->t.getSid()) u=u->next;//找到卖家,一般都能找到
-                    if(u) u->t.UpdateSellGood(tmp->t);//更新商品信息
+                    flag=true;
+                    QMessageBox::StandardButton reply;
+                    reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
+                    if (reply == QMessageBox::Yes)
+                    {
+                        //修改goods
+                        tmp->t.setRemoveState();
+                        //修改users中的卖家
+                        Node<User>* u=users.gethead();
+                        while(u&&u->t.getid()!=tmp->t.getSid()) u=u->next;//找到卖家,一般都能找到
+                        if(u) u->t.UpdateSellGood(tmp->t);//更新商品信息
 
-                    QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
+                        QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
 
-                    break;
+                        break;
+                    }
+                    else break;
                 }
-                else break;
+                else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
+                {
+                    flag=true;
+                    QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
+                }
+                tmp=tmp->next;
             }
-            else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
-            {
-                flag=true;
-                QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
-            }
-            tmp=tmp->next;
-        }
 
-        if(!flag)
-        {
-            QMessageBox::warning(this, tr("Warning"), tr("The commodity ID doesn't exist!"),QMessageBox::Ok);
+            if(!flag)
+            {
+                QMessageBox::warning(this, tr("Warning"), tr("The commodity ID doesn't exist!"),QMessageBox::Ok);
+            }
         }
     }
 }
@@ -313,6 +316,9 @@ void AdminUI::removeUsers()
                     if (reply == QMessageBox::Yes)
                     {
                         users.del(i);//删除pos==i的用户
+
+                        //qDebug()<<"here" <<endl;
+
                         //更新goods文件,下架相应商品
                         Node<Good>* g=goods.gethead();
                         while(g)

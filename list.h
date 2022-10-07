@@ -98,12 +98,20 @@ public:
 
         if (pos <len)
         {
+           // qDebug()<<pos<<len;
             cur = head;
-            Node<T>* pre=NULL;
+            Node<T>* pre=head;
             for (int i = 0; i < pos-1; ++i) pre = pre->next;//找到要删的节点的前面一个节点
-            for (int i = 0; i < pos; ++i) cur = cur->next;//找到要删除掉的cur
+            for (int i = 0; i < pos; ++i)
+            {
+                cur->t.Print();
+                cur = cur->next;//找到要删除掉的cur
+            }
 
             if(cur==tail) tail=pre;
+            //if(cur==NULL) {qDebug()<<"NULL";}
+           // cur->t.Print();
+            //pre->t.Print();
 
             pre->next=cur->next;
             --len;

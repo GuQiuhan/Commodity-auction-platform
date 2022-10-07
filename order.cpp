@@ -1,4 +1,7 @@
 #include "order.h"
+#include "user.h"
+extern QString OrderID_now;
+#include <QTime>
 
 Order::Order()
 {
@@ -16,6 +19,27 @@ Order::Order(const QString oid,const QString cid, const float uprice,const int n
     this->commdityID=cid;
 
 }
+
+
+Order::Order(const QString cid, const float uprice,const int num,const QString sid,const QString bid)
+{
+    OrderID_now=Add(OrderID_now);
+    this->orderID="T"+OrderID_now;
+
+    QDateTime dateTime= QDateTime::currentDateTime();//获取系统当前的时间
+    this->date= dateTime .toString("yyyy-MM-dd hh:mm:ss");//格式化时间
+
+    this->number=num;
+    this->buyerID=bid;
+    this->sellerID=sid;
+    this->unitPrice=uprice;
+    this->commdityID=cid;
+
+}
+
+
+
+
 
 void Order::operator=(Order const& u)
 {

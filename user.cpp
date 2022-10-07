@@ -187,3 +187,13 @@ void User::UpdateInfo(QString name,QString addr, QString contact,QString bal)
     //同时在list里更新
     //待写
 }
+
+void User::decreaseBal(float num)
+{
+    this->balance-=num;
+}
+
+void User::inreaseBal(float num)
+{
+    this->balance+=num;
+}

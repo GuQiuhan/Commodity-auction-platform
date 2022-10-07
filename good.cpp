@@ -119,3 +119,8 @@ void Good::setRemoveState()
 {
     this->state=false;
 }
+
+void Good::decrease(int num)
+{
+    this->number-=num;
+}

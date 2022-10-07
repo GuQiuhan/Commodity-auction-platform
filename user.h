@@ -63,6 +63,8 @@ public:
     void UpdateSellGood(Good& g);//更新修改后的发布商品
     void UpdateInfo(QString name,QString addr, QString contact,QString bal);
 
+    void decreaseBal(float num);//买东西余额减少
+    void inreaseBal(float num);//余额增加
 
 
 };

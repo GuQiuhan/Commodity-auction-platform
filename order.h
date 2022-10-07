@@ -19,6 +19,8 @@ public:
     Order();
     //orderID,commodityID,unitPrice,number,date,sellerID,buyerID
     Order(const QString oid,const QString cid, const float uprice,const int num,QString d,const QString sid,const QString bid);
+    Order(const QString cid, const float uprice,const int num,const QString sid,const QString bid);//购买时创建订单
+
 
     QString getOid();
     QString getCid();

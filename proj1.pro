@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addedfunctions.cpp \
     adminui.cpp \
     buyer.cpp \
     buygood.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
     userui.cpp
 
 HEADERS += \
+    addedfunctions.h \
     adminui.h \
     buyer.h \
     buygood.h \

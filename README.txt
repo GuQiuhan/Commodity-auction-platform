@@ -7,6 +7,7 @@ error while building/deploying project test (kit: desktop (x86-darwin-generic-ma
 
 3.在终端中运行：
 source ~/.bash_profile   //这一步不一定需要，若显示qmake命令不可使用，就输入这一行命令
-qmake proj1.pro
-make
-open *proj1*   //这一步是为了运行proj1.app
+qmake -o Makefile proj1.pro //根据写好的proj1.pro生成makefile，同时自动的包含moc和uic的连编规则
+make //编译
+open *proj1.app*   //直接运行proj1.app
+//open *proj1* //打开qt并且运行proj1

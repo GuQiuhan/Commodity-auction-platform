@@ -898,6 +898,7 @@ qrc_myResources.cpp: myResources.qrc \
 		order.txt \
 		user.txt \
 		good.txt \
+		3.jpg \
 		2.jpg \
 		1.jpg
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/rcc -name myResources myResources.qrc -o qrc_myResources.cpp

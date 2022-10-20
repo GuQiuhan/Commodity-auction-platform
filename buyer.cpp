@@ -4,8 +4,12 @@
 #include "search.h"
 #include "buygood.h"
 #include <QStandardItemModel>
+#include "auctionbuygood.h"
+#include <QTimer>
 
 extern List<Good> goods;
+extern List<User> users;
+
 //extern QString content;//全局变量，用来传输搜索框中的内容//这里可以改进,用函数调用来解决
 
 
@@ -14,6 +18,10 @@ Buyer::Buyer(QWidget *parent) :
     ui(new Ui::Buyer)
 {
     ui->setupUi(this);
+    //不断更新数据实体
+    timer = new QTimer(this); //this 为parent类, 表示当前窗口
+    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    timer->start(2000); // 每2s刷新一次
 }
 
 Buyer::~Buyer()
@@ -37,7 +45,7 @@ void Buyer::on_comboBox_currentTextChanged(const QString &arg1)
     else if(ui->comboBox->currentText()=="Buy Commodities")
     {
         this->buyCommodities();
-       this->checkOrders();//更新订单
+       //this->checkOrders();//更新订单
     }
     else if(ui->comboBox->currentText()=="Search Commodities")
     {
@@ -189,10 +197,16 @@ void Buyer::searchCommodities()
 
 void Buyer::buyCommodities()
 {
+    /**
     BuyGood bg;//增加一个抽象层专门用来买商品
     bg.Init(this->u);
     bg.exec();
     this->u=bg.getUser();//更新此数据实体
+    **/
+    AuctionBuyGood a;
+    a.Init(this->u);
+    //cout<< "here"<<endl;
+    a.exec();
 }
 
 
@@ -200,3 +214,22 @@ User& Buyer::getUser()
 {
     return this->u;
 }
+
+
+void Buyer::handleTimeout()//不断更新数据实体
+{
+    Node<User>* tmp=users.gethead();
+    while(tmp!=NULL)
+    {
+        if(tmp->t.getid()==this->getUser().getid())
+        {
+            break;
+        }
+        tmp=tmp->next;
+    }
+
+    this->u=tmp->t;
+
+    cout<< "success update buyer.user"<<endl;
+}
+

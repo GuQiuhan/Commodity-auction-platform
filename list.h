@@ -104,7 +104,7 @@ public:
             for (int i = 0; i < pos-1; ++i) pre = pre->next;//找到要删的节点的前面一个节点
             for (int i = 0; i < pos; ++i)
             {
-                cur->t.Print();
+               // cur->t.Print();
                 cur = cur->next;//找到要删除掉的cur
             }
 

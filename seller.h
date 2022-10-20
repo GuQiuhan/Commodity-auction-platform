@@ -31,6 +31,11 @@ private slots:
 private:
     Ui::Seller *ui;
     User u;//数据实体
+    QTimer* timer;
+
+public slots:
+    void handleTimeout();  //超时处理函数
+
 };
 
 #endif // SELLER_H

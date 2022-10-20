@@ -34,7 +34,7 @@ public:
     void operator=(Order const& u);
 
     void Print(){}
-
+    void setNumber(int n);
 };
 
 #endif // ORDER_H

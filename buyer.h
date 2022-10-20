@@ -29,6 +29,10 @@ private slots:
 private:
     Ui::Buyer *ui;
     User u;
+    QTimer* timer;
+
+public slots:
+    void handleTimeout();  //超时处理函数
 };
 
 void Sear(List<Good>& ans, QString content);

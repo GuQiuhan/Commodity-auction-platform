@@ -18,6 +18,8 @@ public:
     void Init(User& u);
     void checkCommodities();
     User& getUser();
+    void PureBuyGood();
+    //void AuctionBuyGood();
 
 private slots:
     void on_comboBox_currentTextChanged(const QString &arg1);

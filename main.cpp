@@ -9,7 +9,9 @@
 #include "good.h"
 #include "order.h"
 #include "file.h"
+#include "addfunction.h"
 #include <QDir>
+
 using namespace std;
 
 //全局变量
@@ -19,6 +21,7 @@ QString OrderID_now;//只是数字，前面要加上字母
 List<User> users;
 List<Good> goods;
 List<Order> orders;
+List<Auction> auctions;
 
 
 
@@ -37,24 +40,17 @@ int main(int argc, char *argv[])
     char* user_path=(char *)"/Users/pro/Desktop/proj1/user.txt";
     char* good_path=(char *)"/Users/pro/Desktop/proj1/good.txt";
     char* order_path=(char *)"/Users/pro/Desktop/proj1/order.txt";
+    char* auction_path=(char *)"/Users/pro/Desktop/proj1/auction.txt";
 
-    /**QString path = QDir::cleanPath(QCoreApplication::applicationDirPath() + QDir::separator() + QString("/user.txt"));
-    QByteArray ba = path.toLatin1(); // must
-    char* user_path=ba.data();
-
-    path = QDir::cleanPath(QCoreApplication::applicationDirPath() + QDir::separator() + QString("/good.txt"));
-    ba = path.toLatin1(); // must
-    char* good_path=ba.data();
-
-    path = QDir::cleanPath(QCoreApplication::applicationDirPath() + QDir::separator() + QString("/order.txt"));
-    ba = path.toLatin1(); // must
-    char* order_path=ba.data();**/
 
     //一定要先读goods和orders文件,因为创建users的时候也需要用到读好的前两个文件
     goods=WriteOutGood(good_path); //用于存储商品文件
     orders=WriteOutOrder(order_path); ; //用于存储订单文件
-    users=WriteOutUser(user_path); // 用于存储用户文件
+    users=WriteOutUser(user_path);
+    auctions=WriteOutAuction(auction_path);// 用于存储用户文件
 
+    //启动订单计时器
+    AddFunction addtimer;
 
     dlg.exec();
 
@@ -62,5 +58,6 @@ int main(int argc, char *argv[])
     WriteInUser(user_path);
     WriteInGood(good_path);
     WriteInOrder(order_path);
+    WriteInAuction(auction_path);
     return a.exec();
 }

@@ -34,6 +34,7 @@ private slots:
 private:
     Ui::Info *ui;
     User u;//数据实体
+
 };
 
 #endif // INFO_H

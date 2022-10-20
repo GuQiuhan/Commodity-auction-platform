@@ -6,6 +6,7 @@
 #include "user.h"
 #include "good.h"
 #include "order.h"
+#include "addfunction.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -16,6 +17,7 @@ using namespace std;
 List<User>  WriteOutUser(const char* path);//返回读好的数据结构
 List<Good>  WriteOutGood(const char* path);
 List<Order> WriteOutOrder(const char* path);
+List<Auction> WriteOutAuction(const char* path);
 
 //void UpdateUser(const char* path);
 //void UpdateGood(const char* path);
@@ -25,6 +27,7 @@ List<Order> WriteOutOrder(const char* path);
 void WriteInUser(const char* path);
 void WriteInGood(const char* path);
 void WriteInOrder(const char* path);
+void WriteInAuction(const char* path);
 
 
 #endif // FILE_H

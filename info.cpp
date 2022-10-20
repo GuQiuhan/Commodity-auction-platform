@@ -9,6 +9,8 @@ Info::Info(QWidget *parent) :
     ui(new Ui::Info)
 {
     ui->setupUi(this);
+
+
 }
 
 Info::~Info()
@@ -81,3 +83,4 @@ QString Info::getBal()
 {
     return ui->balance->text();
 }
+

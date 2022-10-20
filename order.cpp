@@ -81,3 +81,9 @@ QString Order::getBid()
 {
     return this->buyerID;
 }
+
+
+void Order::setNumber(int n)
+{
+    this->number=n;
+}

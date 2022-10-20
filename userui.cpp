@@ -12,6 +12,12 @@ UserUI::UserUI(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //不断更新数据实体
+    timer = new QTimer(this); //this 为parent类, 表示当前窗口
+    cout << "here"<<endl;
+    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    timer->start(2000); // 每2s刷新一次
+
     //ui->label_2->setText("Hello! "+ user.getName()+"!"); //对全局变量进行显示
 
 
@@ -27,7 +33,11 @@ UserUI::UserUI(QWidget *parent,User& u) :
 
     ui->label_2->setText("Hello! "+ user.getName()+"!"); //对全局变量进行显示
 
-    //qDebug()<<u.getSellerGood().getLen();
+    //不断更新数据实体
+    timer = new QTimer(this); //this 为parent类, 表示当前窗口
+    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    timer->start(2000); // 每2s刷新一次
+
 }
 
 UserUI::~UserUI()
@@ -97,4 +107,26 @@ void UserUI::on_comboBox_currentTextChanged(const QString &arg1)
 
 }
 
+User& UserUI::getUser()
+{
+    return this->user;
+}
 
+
+
+void UserUI::handleTimeout()//不断更新数据实体
+{
+    Node<User>* tmp=users.gethead();
+    while(tmp!=NULL)
+    {
+        if(tmp->t.getid()==this->getUser().getid())
+        {
+            break;
+        }
+        tmp=tmp->next;
+    }
+
+    this->user=tmp->t;
+
+    cout<< "success update userui.user"<<endl;
+}

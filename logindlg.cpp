@@ -38,6 +38,7 @@ void LoginDlg::on_Login_pushButton_clicked()//用户按下登录按钮
         }
         else if (Check(ui->Username_lineEdit->text(),ui->Password_lineEdit->text()))//用户登陆
         {
+            QMessageBox::information(this, "Title", "Login Success!");//提示成功
            this->close();//关闭对话框，方便之后返回的时候再次打开
 
            //找到user,创建ui

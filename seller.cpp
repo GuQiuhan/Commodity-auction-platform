@@ -7,6 +7,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QStandardItemModel>
+#include <QTimer>
 
 extern List<Good> goods;
 extern List<User> users;
@@ -17,6 +18,11 @@ Seller::Seller(QWidget *parent) :
     ui(new Ui::Seller)
 {
     ui->setupUi(this);
+    //不断更新数据实体
+    timer = new QTimer(this); //this 为parent类, 表示当前窗口
+    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    timer->start(2000); // 每2s刷新一次
+
 }
 
 Seller::~Seller()
@@ -256,4 +262,22 @@ void Seller::ModifyCommodities()
 User& Seller::getUser()
 {
     return this->u;
+}
+
+
+void Seller::handleTimeout()//不断更新数据实体
+{
+    Node<User>* tmp=users.gethead();
+    while(tmp!=NULL)
+    {
+        if(tmp->t.getid()==this->getUser().getid())
+        {
+            break;
+        }
+        tmp=tmp->next;
+    }
+
+    this->u=tmp->t;
+
+    cout<< "success update seller.user"<<endl;
 }

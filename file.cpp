@@ -3,6 +3,7 @@
 extern List<Good> goods;
 extern List<Order> orders;
 extern List<User> users;
+extern List<Auction> auctions;
 extern QString UserID_now;//只是数字，前面要加上字母
 extern QString GoodID_now;//只是数字，前面要加上字母
 extern QString OrderID_now;//只是数字，前面要加上字母
@@ -261,6 +262,11 @@ void WriteInUser(const char* path)
         // 输出到磁盘文件
         fout << "userID,username,password,phoneNumber,address,balance,userState"<< endl;
         Node<User>* tmp=users.gethead();
+        if(tmp==NULL)
+        {
+            fout.close();
+            return;
+        }
         while(tmp->next!=NULL)
         {
             fout<< tmp->t.getid().toStdString()<<",";
@@ -297,6 +303,11 @@ void WriteInGood(const char* path)
         // 输出到磁盘文件
         fout << "commodityID,name,price,number,description,sellerID,addedDate,state"<< endl;
         Node<Good>* tmp=goods.gethead();
+        if(tmp==NULL)
+        {
+            fout.close();
+            return;
+        }
         while(tmp->next!=NULL)
         {
             fout<< tmp->t.getID().toStdString()<<",";
@@ -330,6 +341,7 @@ void WriteInGood(const char* path)
 }
 void WriteInOrder(const char* path)
 {
+    //cout<< "write out order"<<endl;
     ofstream fout( path);
     if ( ! fout) cout << "Fail to write the file:" <<path <<endl;
     else
@@ -337,6 +349,11 @@ void WriteInOrder(const char* path)
         // 输出到磁盘文件
         fout << "orderID,commodityID,unitPrice,number,date,sellerID,buyerID"<< endl;
         Node<Order>* tmp=orders.gethead();
+        if(tmp==NULL)
+        {
+            fout.close();
+            return;
+        }
         while(tmp->next!=NULL)
         {
             fout<< tmp->t.getOid().toStdString()<<",";
@@ -363,4 +380,120 @@ void WriteInOrder(const char* path)
         fout.close();
     }
 }
+
+List<Auction> WriteOutAuction(const char* path)
+{
+    List<Auction> l;
+    //orderID,commodityID,unitPrice,number,date,sellerID,buyerID,time
+    ifstream fin;
+    fin.open(path,ios::in); //打开文件
+    if (!fin.is_open())  cout << "Fail to read the file" << path<<endl;
+    else{
+
+        string buf;
+        getline(fin,buf);//跳过第一行表头
+
+        while (getline(fin, buf))
+        { //切片
+            string delimiter=",";
+            size_t pos=0;
+
+            pos=buf.find(delimiter);
+            string s=buf.substr(0,pos);
+            QString oid = QString::fromStdString(s);
+            buf.erase(0,pos+delimiter.length());
+
+            //if(oid.mid(1).toInt()>OrderID_now.toInt()) OrderID_now=oid;
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            QString cid= QString::fromStdString(s);
+            buf.erase(0,pos+delimiter.length());
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            float unitprice = std::stof(s);
+            buf.erase(0,pos+delimiter.length());
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            int number = stoi(s);
+            buf.erase(0,pos+delimiter.length());
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            QString date = QString::fromStdString(s);
+            buf.erase(0,pos+delimiter.length());
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            QString sellerID = QString::fromStdString(s);
+            buf.erase(0,pos+delimiter.length());
+
+            pos=buf.find(delimiter);
+            s=buf.substr(0,pos);
+            QString buyerID = QString::fromStdString(s);
+            buf.erase(0,pos+delimiter.length());
+
+
+            QString time = QString::fromStdString(buf);
+
+
+            Order tmp(oid,cid,unitprice,number,date,sellerID,buyerID);
+            Auction a(tmp,time);
+            l.push_back(a);
+
+        }
+        //cout << "ok to order.txt" << endl;
+
+        fin.close();
+    }
+    return l;
+}
+
+void WriteInAuction(const char* path)
+{
+
+    //cout<<"writing"<<endl;
+    ofstream fout( path);
+    if ( ! fout) cout << "Fail to write the file:" <<path <<endl;
+    else
+    {
+        // 输出到磁盘文件
+        fout << "orderID,commodityID,unitPrice,number,date,sellerID,buyerID,time"<< endl;
+        Node<Auction>* tmp=auctions.gethead();
+        if(tmp==NULL)
+        {
+            fout.close();
+            return;
+        }
+        while(tmp->next!=NULL)
+        {
+            fout<< tmp->t.getOrder().getOid().toStdString()<<",";
+            fout<<tmp->t.getOrder().getCid().toStdString()<<",";
+            fout<<tmp->t.getOrder().getprice()<<",";
+            fout<< tmp->t.getOrder().getNumber()<<",";
+            fout <<tmp->t.getOrder().getDate().toStdString()<<",";
+            fout << tmp->t.getOrder().getSid().toStdString()<<",";
+            fout << tmp->t.getOrder().getBid().toStdString()<<",";
+            fout<<tmp->t.getTime().toStdString();
+            fout <<endl;
+            tmp=tmp->next;
+        }
+        //最后一个不需要回车符
+        fout<< tmp->t.getOrder().getOid().toStdString()<<",";
+        fout<<tmp->t.getOrder().getCid().toStdString()<<",";
+        fout<<tmp->t.getOrder().getprice()<<",";
+        fout<< tmp->t.getOrder().getNumber()<<",";
+        fout <<tmp->t.getOrder().getDate().toStdString()<<",";
+        fout << tmp->t.getOrder().getSid().toStdString()<<",";
+        fout << tmp->t.getOrder().getBid().toStdString()<<",";
+        fout<<tmp->t.getTime().toStdString();
+
+        //保证最后一行没有回车符,即最后光标停留在最后一行的最后!!否则读文件会出错
+        //关闭文件输出流
+        fout.close();
+    }
+}
+
 

@@ -2,6 +2,8 @@
 #include "ui_buygood.h"
 #include <QStandardItemModel>
 #include <QMessageBox>
+//#include <thread>//多线程
+
 extern List<Good> goods;
 extern List<Order> orders;
 extern List<User> users;
@@ -129,6 +131,96 @@ void BuyGood::on_comboBox_currentTextChanged(const QString &arg1)//选择了一�
 }
 
 void BuyGood::on_pushButton_2_clicked()//确定修改
+{/**
+    if(ui->comboBox->currentText()!="Choose···"&&ui->spinBox->value()!=0)
+    {
+        Node<Good> * tmp=goods.gethead();//在商品列表中找到要买的商品
+        while(1)
+        {
+            if(tmp->t.getID()==ui->comboBox->currentText()) break;
+            tmp=tmp->next;
+        }
+        //检查余额是否够
+        if(tmp->t.getprice()*ui->spinBox->value()>this->u.getBal())
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Balance not enough!"),QMessageBox::Ok);
+        }
+        else
+        {
+
+            //修改商品数量goods
+            //此处已经保证了数量是一定够的
+            tmp->t.decrease(ui->spinBox->value());
+
+            //修改orders
+            Order o(tmp->t.getID(),tmp->t.getprice(),ui->spinBox->value(),tmp->t.getSid(),this->u.getid());
+            orders.push_back(o);
+
+            //修改buyer信息
+            this->u.addBuyGood(tmp->t);
+            this->u.addBuyOrder(o);
+            this->u.decreaseBal(tmp->t.getprice()*ui->spinBox->value());
+            users.update(this->u);//修改users
+            //修改seller信息,直接在users里修改
+            Node<User> * s=users.gethead();//在商品列表中找到要买的商品
+            while(1)
+            {
+                if(s->t.getid()==tmp->t.getSid()) break;
+                s=s->next;
+            }
+            s->t.addSellOrder(o);
+            s->t.inreaseBal(tmp->t.getprice()*ui->spinBox->value());
+
+
+            if(tmp->t.getNumber()==0)//商品被买光了，要下架
+            {
+                //修改user
+                s->t.delGood(tmp->t);
+                users.update(u);
+                //修改goods
+                Node<Good> *g=goods.gethead();
+                int i=0;
+                for(; i<goods.getLen();g=g->next,i++)
+                {
+                    if(g->t==tmp->t) break;
+                }
+                goods.del(i);
+
+            }
+
+            //如果买的是自己的东西
+            if(s->t.getid()==this->u.getid())
+            {
+                this->u.inreaseBal(tmp->t.getprice()*ui->spinBox->value());//本数据实体余额也要增加
+                if(tmp->t.getNumber()==0)//商品被买光了，要下架
+                {
+                    //修改本数据实体
+                    this->u.delGood(tmp->t);
+
+                }
+            }
+            QMessageBox::information(this, "Title", "Buy Success!");//提示成功
+            ui->balance->setText("Your balance: "+QString("%1").arg(u.getBal()));//重新展示余额
+        }
+        this->checkCommodities();//重新展示商品
+        ui->spinBox->setValue(0);//清空选项
+        ui->comboBox->setCurrentIndex(0);
+
+
+
+
+    }**/
+    this->PureBuyGood();
+    //this->AuctionBuyGood();
+}
+
+void BuyGood::on_pushButton_clicked()
+{
+    this->close();
+}
+
+
+void BuyGood::PureBuyGood()
 {
     if(ui->comboBox->currentText()!="Choose···"&&ui->spinBox->value()!=0)
     {
@@ -210,7 +302,4 @@ void BuyGood::on_pushButton_2_clicked()//确定修改
     }
 }
 
-void BuyGood::on_pushButton_clicked()
-{
-    this->close();
-}
+

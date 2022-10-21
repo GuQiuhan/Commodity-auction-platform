@@ -150,38 +150,5 @@ color:rgb(128, 0, 2)</string>
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>LaunchGood</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>132</x>
-     <y>289</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>44</x>
-     <y>232</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>LaunchGood</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>325</x>
-     <y>300</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>395</x>
-     <y>266</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

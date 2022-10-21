@@ -11,6 +11,7 @@
 #include "file.h"
 #include "addfunction.h"
 #include <QDir>
+#include "prepare.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ List<Good> goods;
 List<Order> orders;
 List<Auction> auctions;
 
-
+int mode;//0为未选，1为auction，2为purchase
 
 int main(int argc, char *argv[])
 {
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     char* order_path=(char *)"/Users/pro/Desktop/proj1/order.txt";
     char* auction_path=(char *)"/Users/pro/Desktop/proj1/auction.txt";
 
-
+    mode=0;
     //一定要先读goods和orders文件,因为创建users的时候也需要用到读好的前两个文件
     goods=WriteOutGood(good_path); //用于存储商品文件
     orders=WriteOutOrder(order_path); ; //用于存储订单文件
@@ -51,8 +52,12 @@ int main(int argc, char *argv[])
 
     //启动订单计时器
     AddFunction addtimer;
+    //qDebug()<< GoodID_now<<endl;
 
-    dlg.exec();
+    Prepare p;
+    int x=p.exec();
+    qDebug()<<mode<<endl;
+    if(x==QDialog::Accepted)  dlg.exec();
 
     //写入文件
     WriteInUser(user_path);

@@ -52,8 +52,9 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = addedfunctions.cpp \
+SOURCES       = addfunction.cpp \
 		adminui.cpp \
+		auctionbuygood.cpp \
 		buyer.cpp \
 		buygood.cpp \
 		file.cpp \
@@ -67,6 +68,7 @@ SOURCES       = addedfunctions.cpp \
 		manual.cpp \
 		modify.cpp \
 		order.cpp \
+		prepare.cpp \
 		recharge.cpp \
 		register.cpp \
 		remove.cpp \
@@ -75,7 +77,9 @@ SOURCES       = addedfunctions.cpp \
 		test.cpp \
 		user.cpp \
 		userui.cpp qrc_myResources.cpp \
+		moc_addfunction.cpp \
 		moc_adminui.cpp \
+		moc_auctionbuygood.cpp \
 		moc_buyer.cpp \
 		moc_buygood.cpp \
 		moc_info.cpp \
@@ -84,14 +88,16 @@ SOURCES       = addedfunctions.cpp \
 		moc_mainwindow.cpp \
 		moc_manual.cpp \
 		moc_modify.cpp \
+		moc_prepare.cpp \
 		moc_recharge.cpp \
 		moc_register.cpp \
 		moc_remove.cpp \
 		moc_search.cpp \
 		moc_seller.cpp \
 		moc_userui.cpp
-OBJECTS       = addedfunctions.o \
+OBJECTS       = addfunction.o \
 		adminui.o \
+		auctionbuygood.o \
 		buyer.o \
 		buygood.o \
 		file.o \
@@ -105,6 +111,7 @@ OBJECTS       = addedfunctions.o \
 		manual.o \
 		modify.o \
 		order.o \
+		prepare.o \
 		recharge.o \
 		register.o \
 		remove.o \
@@ -114,7 +121,9 @@ OBJECTS       = addedfunctions.o \
 		user.o \
 		userui.o \
 		qrc_myResources.o \
+		moc_addfunction.o \
 		moc_adminui.o \
+		moc_auctionbuygood.o \
 		moc_buyer.o \
 		moc_buygood.o \
 		moc_info.o \
@@ -123,6 +132,7 @@ OBJECTS       = addedfunctions.o \
 		moc_mainwindow.o \
 		moc_manual.o \
 		moc_modify.o \
+		moc_prepare.o \
 		moc_recharge.o \
 		moc_register.o \
 		moc_remove.o \
@@ -337,8 +347,9 @@ DIST          = ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/exceptions.prf \
 		../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/yacc.prf \
 		../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/lex.prf \
-		proj1.pro addedfunctions.h \
+		proj1.pro addfunction.h \
 		adminui.h \
+		auctionbuygood.h \
 		buyer.h \
 		buygood.h \
 		file.h \
@@ -351,6 +362,7 @@ DIST          = ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/spec_pre.prf \
 		manual.h \
 		modify.h \
 		order.h \
+		prepare.h \
 		recharge.h \
 		register.h \
 		remove.h \
@@ -358,8 +370,9 @@ DIST          = ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/spec_pre.prf \
 		seller.h \
 		test.h \
 		user.h \
-		userui.h addedfunctions.cpp \
+		userui.h addfunction.cpp \
 		adminui.cpp \
+		auctionbuygood.cpp \
 		buyer.cpp \
 		buygood.cpp \
 		file.cpp \
@@ -373,6 +386,7 @@ DIST          = ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/spec_pre.prf \
 		manual.cpp \
 		modify.cpp \
 		order.cpp \
+		prepare.cpp \
 		recharge.cpp \
 		register.cpp \
 		remove.cpp \
@@ -399,7 +413,7 @@ include /Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/features/mac/sdk.mk
 first: all
 ####### Build rules
 
-proj1.app/Contents/MacOS/proj1: ui_adminui.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h $(OBJECTS)  
+proj1.app/Contents/MacOS/proj1: ui_addfunction.h ui_adminui.h ui_auctionbuygood.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_prepare.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h $(OBJECTS)  
 	@test -d proj1.app/Contents/MacOS/ || mkdir -p proj1.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -846,12 +860,17 @@ proj1.app/Contents/Resources/empty.lproj:
 proj1.app/Contents/Info.plist: 
 	@test -d proj1.app/Contents || mkdir -p proj1.app/Contents
 	@$(DEL_FILE) proj1.app/Contents/Info.plist
-	@sed -e "s,@SHORT_VERSION@,1.0,g" -e "s,\$${QMAKE_SHORT_VERSION},1.0,g" -e "s,@FULL_VERSION@,1.0.0,g" -e "s,\$${QMAKE_FULL_VERSION},1.0.0,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" -e "s,@BUNDLEIDENTIFIER@,guqiuhan.proj1,g" -e "s,\$${PRODUCT_BUNDLE_IDENTIFIER},guqiuhan.proj1,g" -e "s,\$${MACOSX_DEPLOYMENT_TARGET},10.13,g" -e "s,\$${IPHONEOS_DEPLOYMENT_TARGET},,g" -e "s,\$${TVOS_DEPLOYMENT_TARGET},,g" -e "s,\$${WATCHOS_DEPLOYMENT_TARGET},,g" -e "s,@ICON@,,g" -e "s,\$${ASSETCATALOG_COMPILER_APPICON_NAME},,g" -e "s,@EXECUTABLE@,proj1,g" -e "s,@LIBRARY@,proj1,g" -e "s,\$${EXECUTABLE_NAME},proj1,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" ../../Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang/Info.plist.app >proj1.app/Contents/Info.plist
+	@sed -e "s,@SHORT_VERSION@,1.0,g" -e "s,\$${QMAKE_SHORT_VERSION},1.0,g" -e "s,@FULL_VERSION@,1.0.0,g" -e "s,\$${QMAKE_FULL_VERSION},1.0.0,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" -e "s,@BUNDLEIDENTIFIER@,guqiuhan.proj1,g" -e "s,\$${PRODUCT_BUNDLE_IDENTIFIER},guqiuhan.proj1,g" -e "s,\$${MACOSX_DEPLOYMENT_TARGET},10.13,g" -e "s,\$${IPHONEOS_DEPLOYMENT_TARGET},,g" -e "s,\$${TVOS_DEPLOYMENT_TARGET},,g" -e "s,\$${WATCHOS_DEPLOYMENT_TARGET},,g" -e "s,@ICON@,proj1.icns,g" -e "s,\$${ASSETCATALOG_COMPILER_APPICON_NAME},proj1.icns,g" -e "s,@EXECUTABLE@,proj1,g" -e "s,@LIBRARY@,proj1,g" -e "s,\$${EXECUTABLE_NAME},proj1,g" -e "s,@TYPEINFO@,????,g" -e "s,\$${QMAKE_PKGINFO_TYPEINFO},????,g" ../../Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang/Info.plist.app >proj1.app/Contents/Info.plist
+proj1.app/Contents/Resources/proj1.icns: proj1.icns
+	@test -d proj1.app/Contents/Resources/ || mkdir -p proj1.app/Contents/Resources/
+	@$(DEL_FILE) proj1.app/Contents/Resources/proj1.icns
+	@$(COPY_FILE) proj1.icns proj1.app/Contents/Resources/proj1.icns
 
 all: Makefile \
 		proj1.app/Contents/PkgInfo \
 		proj1.app/Contents/Resources/empty.lproj \
-		proj1.app/Contents/Info.plist proj1.app/Contents/MacOS/proj1
+		proj1.app/Contents/Info.plist \
+		proj1.app/Contents/Resources/proj1.icns proj1.app/Contents/MacOS/proj1
 
 dist: distdir FORCE
 	(cd `dirname $(DISTDIR)` && $(TAR) $(DISTNAME).tar $(DISTNAME) && $(COMPRESS) $(DISTNAME).tar) && $(MOVE) `dirname $(DISTDIR)`/$(DISTNAME).tar.gz . && $(DEL_FILE) -r $(DISTDIR)
@@ -861,9 +880,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents myResources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents addedfunctions.h adminui.h buyer.h buygood.h file.h good.h info.h launchgood.h list.h logindlg.h mainwindow.h manual.h modify.h order.h recharge.h register.h remove.h search.h seller.h test.h user.h userui.h $(DISTDIR)/
-	$(COPY_FILE) --parents addedfunctions.cpp adminui.cpp buyer.cpp buygood.cpp file.cpp good.cpp info.cpp launchgood.cpp list.cpp logindlg.cpp main.cpp mainwindow.cpp manual.cpp modify.cpp order.cpp recharge.cpp register.cpp remove.cpp search.cpp seller.cpp test.cpp user.cpp userui.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents adminui.ui buyer.ui buygood.ui info.ui launchgood.ui logindlg.ui mainwindow.ui manual.ui modify.ui recharge.ui register.ui remove.ui search.ui seller.ui userui.ui $(DISTDIR)/
+	$(COPY_FILE) --parents addfunction.h adminui.h auctionbuygood.h buyer.h buygood.h file.h good.h info.h launchgood.h list.h logindlg.h mainwindow.h manual.h modify.h order.h prepare.h recharge.h register.h remove.h search.h seller.h test.h user.h userui.h $(DISTDIR)/
+	$(COPY_FILE) --parents addfunction.cpp adminui.cpp auctionbuygood.cpp buyer.cpp buygood.cpp file.cpp good.cpp info.cpp launchgood.cpp list.cpp logindlg.cpp main.cpp mainwindow.cpp manual.cpp modify.cpp order.cpp prepare.cpp recharge.cpp register.cpp remove.cpp search.cpp seller.cpp test.cpp user.cpp userui.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents addfunction.ui adminui.ui auctionbuygood.ui buyer.ui buygood.ui info.ui launchgood.ui logindlg.ui mainwindow.ui manual.ui modify.ui prepare.ui recharge.ui register.ui remove.ui search.ui seller.ui userui.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -898,9 +917,12 @@ qrc_myResources.cpp: myResources.qrc \
 		order.txt \
 		user.txt \
 		good.txt \
+		4.jpg \
+		4icon32x32.ico \
 		3.jpg \
 		2.jpg \
-		1.jpg
+		1.jpg \
+		proj1.icns
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/rcc -name myResources myResources.qrc -o qrc_myResources.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -909,9 +931,28 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -O2 -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -mmacosx-version-min=10.13 -Wall -Wextra -dM -E -o moc_predefs.h ../../Qt5.14.2/5.14.2/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_adminui.cpp moc_buyer.cpp moc_buygood.cpp moc_info.cpp moc_launchgood.cpp moc_logindlg.cpp moc_mainwindow.cpp moc_manual.cpp moc_modify.cpp moc_recharge.cpp moc_register.cpp moc_remove.cpp moc_search.cpp moc_seller.cpp moc_userui.cpp
+compiler_moc_header_make_all: moc_addfunction.cpp moc_adminui.cpp moc_auctionbuygood.cpp moc_buyer.cpp moc_buygood.cpp moc_info.cpp moc_launchgood.cpp moc_logindlg.cpp moc_mainwindow.cpp moc_manual.cpp moc_modify.cpp moc_prepare.cpp moc_recharge.cpp moc_register.cpp moc_remove.cpp moc_search.cpp moc_seller.cpp moc_userui.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_adminui.cpp moc_buyer.cpp moc_buygood.cpp moc_info.cpp moc_launchgood.cpp moc_logindlg.cpp moc_mainwindow.cpp moc_manual.cpp moc_modify.cpp moc_recharge.cpp moc_register.cpp moc_remove.cpp moc_search.cpp moc_seller.cpp moc_userui.cpp
+	-$(DEL_FILE) moc_addfunction.cpp moc_adminui.cpp moc_auctionbuygood.cpp moc_buyer.cpp moc_buygood.cpp moc_info.cpp moc_launchgood.cpp moc_logindlg.cpp moc_mainwindow.cpp moc_manual.cpp moc_modify.cpp moc_prepare.cpp moc_recharge.cpp moc_register.cpp moc_remove.cpp moc_search.cpp moc_seller.cpp moc_userui.cpp
+moc_addfunction.cpp: addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		list.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		order.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		user.h \
+		good.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDateTime \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		moc_predefs.h \
+		../../Qt5.14.2/5.14.2/clang_64/bin/moc
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib addfunction.h -o moc_addfunction.cpp
+
 moc_adminui.cpp: adminui.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
@@ -924,6 +965,21 @@ moc_adminui.cpp: adminui.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/clang_64/bin/moc
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib adminui.h -o moc_adminui.cpp
+
+moc_auctionbuygood.cpp: auctionbuygood.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		user.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		list.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		good.h \
+		order.h \
+		moc_predefs.h \
+		../../Qt5.14.2/5.14.2/clang_64/bin/moc
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib auctionbuygood.h -o moc_auctionbuygood.cpp
 
 moc_buyer.cpp: buyer.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
@@ -996,6 +1052,8 @@ moc_logindlg.cpp: logindlg.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/clang_64/bin/moc
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib logindlg.h -o moc_logindlg.cpp
@@ -1028,6 +1086,13 @@ moc_modify.cpp: modify.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/clang_64/bin/moc
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib modify.h -o moc_modify.cpp
+
+moc_prepare.cpp: prepare.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		moc_predefs.h \
+		../../Qt5.14.2/5.14.2/clang_64/bin/moc
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib prepare.h -o moc_prepare.cpp
 
 moc_recharge.cpp: recharge.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
@@ -1094,6 +1159,8 @@ moc_userui.cpp: userui.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/clang_64/bin/moc
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/moc $(DEFINES) --include /Users/pro/Desktop/proj1/moc_predefs.h -I/Users/pro/Qt5.14.2/5.14.2/clang_64/mkspecs/macx-clang -I/Users/pro/Desktop/proj1 -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers -I/Users/pro/Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/pro/Qt5.14.2/5.14.2/clang_64/lib userui.h -o moc_userui.cpp
@@ -1102,12 +1169,20 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_adminui.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h
+compiler_uic_make_all: ui_addfunction.h ui_adminui.h ui_auctionbuygood.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_prepare.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_adminui.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h
+	-$(DEL_FILE) ui_addfunction.h ui_adminui.h ui_auctionbuygood.h ui_buyer.h ui_buygood.h ui_info.h ui_launchgood.h ui_logindlg.h ui_mainwindow.h ui_manual.h ui_modify.h ui_prepare.h ui_recharge.h ui_register.h ui_remove.h ui_search.h ui_seller.h ui_userui.h
+ui_addfunction.h: addfunction.ui \
+		../../Qt5.14.2/5.14.2/clang_64/bin/uic
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/uic addfunction.ui -o ui_addfunction.h
+
 ui_adminui.h: adminui.ui \
 		../../Qt5.14.2/5.14.2/clang_64/bin/uic
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/uic adminui.ui -o ui_adminui.h
+
+ui_auctionbuygood.h: auctionbuygood.ui \
+		../../Qt5.14.2/5.14.2/clang_64/bin/uic
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/uic auctionbuygood.ui -o ui_auctionbuygood.h
 
 ui_buyer.h: buyer.ui \
 		../../Qt5.14.2/5.14.2/clang_64/bin/uic
@@ -1140,6 +1215,10 @@ ui_manual.h: manual.ui \
 ui_modify.h: modify.ui \
 		../../Qt5.14.2/5.14.2/clang_64/bin/uic
 	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/uic modify.ui -o ui_modify.h
+
+ui_prepare.h: prepare.ui \
+		../../Qt5.14.2/5.14.2/clang_64/bin/uic
+	/Users/pro/Qt5.14.2/5.14.2/clang_64/bin/uic prepare.ui -o ui_prepare.h
 
 ui_recharge.h: recharge.ui \
 		../../Qt5.14.2/5.14.2/clang_64/bin/uic
@@ -1177,8 +1256,24 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-addedfunctions.o: addedfunctions.cpp addedfunctions.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o addedfunctions.o addedfunctions.cpp
+addfunction.o: addfunction.cpp addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		list.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		order.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		user.h \
+		good.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDateTime \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		ui_addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTime
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o addfunction.o addfunction.cpp
 
 adminui.o: adminui.cpp adminui.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
@@ -1200,11 +1295,38 @@ adminui.o: adminui.cpp adminui.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		search.h \
 		remove.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o adminui.o adminui.cpp
+
+auctionbuygood.o: auctionbuygood.cpp auctionbuygood.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		user.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		list.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		good.h \
+		order.h \
+		ui_auctionbuygood.h \
+		addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDateTime \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/QStandardItemModel \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/qstandarditemmodel.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o auctionbuygood.o auctionbuygood.cpp
 
 buyer.o: buyer.cpp buyer.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
@@ -1221,7 +1343,10 @@ buyer.o: buyer.cpp buyer.h \
 		search.h \
 		buygood.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/QStandardItemModel \
-		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/qstandarditemmodel.h
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/qstandarditemmodel.h \
+		auctionbuygood.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o buyer.o buyer.cpp
 
 buygood.o: buygood.cpp buygood.h \
@@ -1250,7 +1375,14 @@ file.o: file.cpp file.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		good.h \
-		order.h
+		order.h \
+		addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDateTime \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o file.o file.cpp
 
 good.o: good.cpp good.h \
@@ -1287,7 +1419,9 @@ launchgood.o: launchgood.cpp launchgood.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		ui_launchgood.h
+		ui_launchgood.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o launchgood.o launchgood.cpp
 
 list.o: list.cpp list.h \
@@ -1312,6 +1446,8 @@ logindlg.o: logindlg.cpp logindlg.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		ui_logindlg.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
@@ -1340,9 +1476,17 @@ main.o: main.cpp mainwindow.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		file.h \
+		addfunction.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDateTime \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QDir \
-		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdir.h
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdir.h \
+		prepare.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
@@ -1384,6 +1528,14 @@ order.o: order.cpp order.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTime \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qdatetime.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o order.o order.cpp
+
+prepare.o: prepare.cpp prepare.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		ui_prepare.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o prepare.o prepare.cpp
 
 recharge.o: recharge.cpp recharge.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
@@ -1440,7 +1592,9 @@ seller.o: seller.cpp seller.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/QStandardItemModel \
-		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/qstandarditemmodel.h
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtGui.framework/Headers/qstandarditemmodel.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o seller.o seller.cpp
 
 test.o: test.cpp test.h \
@@ -1478,6 +1632,8 @@ userui.o: userui.cpp userui.h \
 		seller.h \
 		buyer.h \
 		info.h \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.14.2/5.14.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		ui_userui.h \
 		logindlg.h \
 		register.h \
@@ -1487,8 +1643,14 @@ userui.o: userui.cpp userui.h \
 qrc_myResources.o: qrc_myResources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_myResources.o qrc_myResources.cpp
 
+moc_addfunction.o: moc_addfunction.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_addfunction.o moc_addfunction.cpp
+
 moc_adminui.o: moc_adminui.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_adminui.o moc_adminui.cpp
+
+moc_auctionbuygood.o: moc_auctionbuygood.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_auctionbuygood.o moc_auctionbuygood.cpp
 
 moc_buyer.o: moc_buyer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_buyer.o moc_buyer.cpp
@@ -1513,6 +1675,9 @@ moc_manual.o: moc_manual.cpp
 
 moc_modify.o: moc_modify.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_modify.o moc_modify.cpp
+
+moc_prepare.o: moc_prepare.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_prepare.o moc_prepare.cpp
 
 moc_recharge.o: moc_recharge.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_recharge.o moc_recharge.cpp

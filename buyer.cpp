@@ -9,6 +9,7 @@
 
 extern List<Good> goods;
 extern List<User> users;
+extern int mode;//选择购买模式
 
 //extern QString content;//全局变量，用来传输搜索框中的内容//这里可以改进,用函数调用来解决
 
@@ -20,8 +21,8 @@ Buyer::Buyer(QWidget *parent) :
     ui->setupUi(this);
     //不断更新数据实体
     timer = new QTimer(this); //this 为parent类, 表示当前窗口
-    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
-    timer->start(2000); // 每2s刷新一次
+    //connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    //timer->start(2000); // 每2s刷新一次
 }
 
 Buyer::~Buyer()
@@ -69,11 +70,22 @@ void Buyer::checkCommodities()
     QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
 
-    Node<Good> * cur=goods.gethead();//买家只能看见所有在售的商品
+    Node<Good> * cur=new Node<Good>;
 
-    QStandardItem* item = 0;
-    for(int i = 0;i<goods.getLen();++i){
-        if(cur->t.getState()==false) continue;//不在售的商品不展示
+    cur=goods.gethead();//买家只能看见所有在售的商品
+
+
+    QStandardItem* item;
+    int i=0;
+    while(cur!=NULL)
+    {
+        if(cur->t.getState()==false)
+        {
+            cur=cur->next;
+            continue;//不在售的商品不展示
+        }
+
+
         item = new QStandardItem(cur->t.getID());//括号里面是QString即可
         model->setItem(i,0,item);
         item = new QStandardItem(cur->t.getName());
@@ -91,7 +103,9 @@ void Buyer::checkCommodities()
         QString str=cur->t.getState()==1?"On Sale":"Off sale";
         item = new QStandardItem(str);
         model->setItem(i,7,item);
+
         cur=cur->next;
+        i++;
     }
 
     ui->tableView->setModel(model);
@@ -197,16 +211,24 @@ void Buyer::searchCommodities()
 
 void Buyer::buyCommodities()
 {
-    /**
-    BuyGood bg;//增加一个抽象层专门用来买商品
-    bg.Init(this->u);
-    bg.exec();
-    this->u=bg.getUser();//更新此数据实体
-    **/
-    AuctionBuyGood a;
-    a.Init(this->u);
-    //cout<< "here"<<endl;
-    a.exec();
+    if(mode==2)
+    {
+        BuyGood bg;//增加一个抽象层专门用来买商品
+
+        bg.Init(this->u);
+
+        bg.exec();
+
+        this->u=bg.getUser();//更新此数据实体
+    }
+    else if(mode==1)
+    {
+        AuctionBuyGood a;
+        a.Init(this->u);
+        //cout<< "here"<<endl;
+        a.exec();
+        this->u=a.getUser();//更新此数据实体
+    }
 }
 
 
@@ -228,7 +250,7 @@ void Buyer::handleTimeout()//不断更新数据实体
         tmp=tmp->next;
     }
 
-    this->u=tmp->t;
+    if(tmp!=NULL) this->u=tmp->t;
 
     cout<< "success update buyer.user"<<endl;
 }

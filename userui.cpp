@@ -126,7 +126,7 @@ void UserUI::handleTimeout()//不断更新数据实体
         tmp=tmp->next;
     }
 
-    this->user=tmp->t;
+    if(tmp!=NULL) this->user=tmp->t;
 
     cout<< "success update userui.user"<<endl;
 }

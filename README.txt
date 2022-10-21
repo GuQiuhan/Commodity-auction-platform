@@ -16,3 +16,7 @@ open *proj1.app*   //直接运行proj1.app
 git add .
 git commit -m "···"
 git push -f origin master
+
+5.运行步骤：将此文件夹拖至桌面运行即可。不要修改任何文件名。
+
+6. 具体打包成dmg有待实现

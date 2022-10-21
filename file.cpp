@@ -134,7 +134,13 @@ List<Good>  WriteOutGood(const char* path)//传入路径
             QString id = QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
 
-            if(id.mid(1).toInt()>GoodID_now.toInt()) GoodID_now=id;
+            //qDebug()<<id.mid(1).toInt();
+            //qDebug()<<GoodID_now.toInt();
+            if(id.mid(1).toInt()>GoodID_now.toInt())
+            {
+                GoodID_now=id.mid(1);
+                //qDebug()<<"change good id";
+            }
 
             //cout << buf <<endl;
             pos=buf.find(delimiter);
@@ -210,7 +216,7 @@ List<Order> WriteOutOrder(const char* path)
             QString oid = QString::fromStdString(s);
             buf.erase(0,pos+delimiter.length());
 
-            if(oid.mid(1).toInt()>OrderID_now.toInt()) OrderID_now=oid;
+            if(oid.mid(1).toInt()>OrderID_now.toInt()) OrderID_now=oid.mid(1);
 
             pos=buf.find(delimiter);
             s=buf.substr(0,pos);
@@ -317,8 +323,8 @@ void WriteInGood(const char* path)
             fout <<tmp->t.getDescription().toStdString()<<",";
             fout << tmp->t.getSid().toStdString()<<",";
             fout << tmp->t.getDate().toStdString()<<",";
-            if(tmp->t.getState()) fout<< "On Sale";
-            else fout<<"Off Sale";
+            if(tmp->t.getState()) fout<< "1";
+            else fout<<"0";
             fout <<endl;
             tmp=tmp->next;
         }

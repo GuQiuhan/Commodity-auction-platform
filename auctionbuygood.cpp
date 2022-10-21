@@ -37,7 +37,12 @@ void AuctionBuyGood::Init(User& u)
     ui->comboBox->addItem("Choose···");
     while(tmp!=NULL)
     {
-        if(tmp->t.getState()==false) continue;
+        if(!tmp->t.getState())
+        {
+
+            tmp=tmp->next;
+            continue;
+        }
         ui->comboBox->addItem(tmp->t.getID());
         tmp=tmp->next;
     }
@@ -51,10 +56,14 @@ void AuctionBuyGood::checkCommodities()
     model->setHorizontalHeaderLabels(labels);
 
     Node<Good> * cur=goods.gethead();//买家只能看见所有在售的商品
-
+    int i=0;
     QStandardItem* item = 0;
-    for(int i = 0;i<goods.getLen();++i){
-        if(cur->t.getState()==false) continue;//不在售的商品不展示
+    while(cur){
+        if(cur->t.getState()==false)
+        {
+            cur=cur->next;
+            continue;//不在售的商品不展示
+        }
         item = new QStandardItem(cur->t.getID());//括号里面是QString即可
         model->setItem(i,0,item);
         item = new QStandardItem(cur->t.getName());
@@ -73,6 +82,7 @@ void AuctionBuyGood::checkCommodities()
         item = new QStandardItem(str);
         model->setItem(i,7,item);
         cur=cur->next;
+        i++;
     }
 
     ui->tableView->setModel(model);
@@ -165,8 +175,6 @@ void AuctionBuyGood::BuyGood()
             Auction a(o);
             auctions.push_back(a);
 
-
-
             //修改buyer信息
             this->u.decreaseBal(ui->doubleSpinBox->value()*ui->spinBox->value());
             users.update(this->u);//修改users
@@ -174,10 +182,10 @@ void AuctionBuyGood::BuyGood()
             QMessageBox::information(this, "Title", "Success! Please waiting for the auction's result!");//提示成功
             ui->balance->setText("Your balance: "+QString("%1").arg(u.getBal()));//重新展示余额
         }
-
-        this->checkAuctions();//重新展示商品
+        this->checkAuctions();//重新展示竞拍订单
         ui->spinBox->setValue(0);//清空选项
         ui->comboBox->setCurrentIndex(0);
+        ui->doubleSpinBox->setValue(0);//清空选项
 
 
 

@@ -20,6 +20,11 @@ struct Node
 {
     T t;
     Node * next=NULL;
+    Node<T>* operator =(Node<T>* tmp)
+    {
+        &(this->t)=&(tmp->t);
+        this->next=tmp->next;
+    }
 };
 
 template <class T>
@@ -87,7 +92,7 @@ public:
         Node<T> *cur = NULL;
 
         if(len==0) return;//空链表，没啥好删的
-        if(pos==0)
+        if(pos==0&&len!=1)
         {
             cur=head;
             head=head->next;
@@ -96,15 +101,26 @@ public:
             return;
         }
 
+        if(pos==0&&len==1)//只有一个节点并删除
+        {
+            cur=head;
+            head=head->next;
+            tail=head;
+            len--;
+            delete cur;
+            return;
+        }
+
         if (pos <len)
         {
-           // qDebug()<<pos<<len;
+            qDebug()<<pos<<len;
             cur = head;
             Node<T>* pre=head;
             for (int i = 0; i < pos-1; ++i) pre = pre->next;//找到要删的节点的前面一个节点
             for (int i = 0; i < pos; ++i)
             {
                // cur->t.Print();
+
                 cur = cur->next;//找到要删除掉的cur
             }
 
@@ -114,6 +130,7 @@ public:
             //pre->t.Print();
 
             pre->next=cur->next;
+            cur->next=NULL;
             --len;
             delete cur; // 注意释放内存，因为insert的时候new Node<T>
         }
@@ -126,9 +143,10 @@ public:
 
     Node<T>* gethead()
     {
-        Node<T> *cur=new Node<T>;
-        cur=head;
-        return cur;
+        //Node<T>* cur=new Node<T>;
+        //cur=head;
+        //return cur;
+        return head;
     }
 
     void push_back(T& t)

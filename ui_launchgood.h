@@ -78,8 +78,6 @@ public:
         pushButton_2->setGeometry(QRect(50, 280, 112, 32));
 
         retranslateUi(LaunchGood);
-        QObject::connect(pushButton_2, SIGNAL(clicked()), LaunchGood, SLOT(reject()));
-        QObject::connect(pushButton, SIGNAL(clicked()), LaunchGood, SLOT(accept()));
 
         QMetaObject::connectSlotsByName(LaunchGood);
     } // setupUi

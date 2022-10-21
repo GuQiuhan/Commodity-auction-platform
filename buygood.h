@@ -18,7 +18,7 @@ public:
     void Init(User& u);
     void checkCommodities();
     User& getUser();
-    void PureBuyGood();
+    //void PureBuyGood();
     //void AuctionBuyGood();
 
 private slots:

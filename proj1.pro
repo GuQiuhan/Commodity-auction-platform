@@ -32,6 +32,7 @@ SOURCES += \
     manual.cpp \
     modify.cpp \
     order.cpp \
+    prepare.cpp \
     recharge.cpp \
     register.cpp \
     remove.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     manual.h \
     modify.h \
     order.h \
+    prepare.h \
     recharge.h \
     register.h \
     remove.h \
@@ -78,6 +80,7 @@ FORMS += \
     mainwindow.ui \
     manual.ui \
     modify.ui \
+    prepare.ui \
     recharge.ui \
     register.ui \
     remove.ui \
@@ -92,3 +95,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     myResources.qrc
+
+ICON = proj1.icns

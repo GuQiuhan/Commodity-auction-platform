@@ -20,8 +20,8 @@ Seller::Seller(QWidget *parent) :
     ui->setupUi(this);
     //不断更新数据实体
     timer = new QTimer(this); //this 为parent类, 表示当前窗口
-    connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
-    timer->start(2000); // 每2s刷新一次
+    //connect(timer, SIGNAL(timeout()), this, SLOT(handleTimeout())); // SLOT填入一个槽函数
+    //timer->start(2000); // 每2s刷新一次
 
 }
 
@@ -82,9 +82,10 @@ void Seller::LaunchCommodities()
     LaunchGood l;
     int res=l.exec();
     if(res==QDialog::Rejected) l.close();//不发布商品
+
     else
     {
-        while(res==QDialog::Accepted)
+        /**while(res==QDialog::Accepted)
         {
             if(l.getName()==""||l.getNumber()==0||l.getPrice()<=0)
             {
@@ -99,7 +100,7 @@ void Seller::LaunchCommodities()
 
             }
 
-        }
+        }**/
 
         Good tmp(l.getName(),l.getPrice(),l.getNumber(),l.getDescription(),u.getid());
         u.addGood(tmp);//更新ui界面中的实体数据用户
@@ -112,6 +113,9 @@ void Seller::LaunchCommodities()
 
 void Seller::checkCommodities()
 {
+
+
+
     QStandardItemModel* model = new QStandardItemModel();
     QStringList labels = QObject::trUtf8("Commodity ID,Name,Price,Launch Time,Seller ID,Number,Description,State").simplified().split(",");
     model->setHorizontalHeaderLabels(labels);
@@ -134,7 +138,9 @@ void Seller::checkCommodities()
         model->setItem(i,5,item);
         item = new QStandardItem(cur->t.getDescription());
         model->setItem(i,6,item);
-        QString str=cur->t.getState()==1?"On Sale":"Off sale";
+        QString str=cur->t.getState()==true?"On Sale":"Off sale";
+
+        //qDebug()<<cur->t.getID()<<" "<<cur->t.getState()<<" "<<str;
         item = new QStandardItem(str);
         model->setItem(i,7,item);
         cur=cur->next;
@@ -188,48 +194,70 @@ void Seller::removeCommodities()
     //调用删除窗口
     Remove r;
     r.exec();
-
-    if(r.getRemoveContent()!="")//说明不是取消键
+    if(r.getFlag())
     {
-        //删除商品
-        Node<Good>* tmp=this->u.getSellerGood().gethead();
-        bool flag=false;
-        for(int i=0; i<this->u.getSellerGood().getLen(); ++i)
+
+        if(r.getRemoveContent()!="")//说明不是取消键
         {
-            if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
+            //删除商品
+            Node<Good>* tmp=this->u.getSellerGood().gethead();
+            bool flag=false;
+            while(tmp!=NULL)
             {
-                flag=true;
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
-                if (reply == QMessageBox::Yes)
+                //qDebug()<<tmp->t.getID();
+                if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState())//找到了要删除的
                 {
-                    //更新数据实体
-                    tmp->t.setRemoveState();
-                    //更新users
-                    users.update(this->u);
-                    //更新goods
-                    Node<Good>* x=goods.gethead();
-                    while(x&&x->t.getID()!=tmp->t.getID()) x=x->next;
-                    if(x) x->t.setRemoveState();//找到相应商品并下架,一般都能找到
-                    QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
+                    flag=true;
+                    QMessageBox::StandardButton reply;
+                    reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
+                    if (reply == QMessageBox::Yes)
+                    {
+                        //更新数据实体
+                        //qDebug()<<tmp->t.getID()<<" "<<tmp->t.getState();
+                        tmp->t.setRemoveState();
+                        if(tmp==this->u.getSellerGood().gethead()) qDebug()<<"equal"<<endl;
+                        //qDebug()<<tmp->t.getState();
+                        //qDebug()<<u.getSellerGood().gethead()->t.getState();
 
-                    break;
+                       // Node<Good>* t=this->u.getSellerGood().gethead();
+                        //while(t!=NULL)
+                       // {
+                        //    if(tmp==t) qDebug()<<"equal"<<endl;
+                        //    qDebug()<<t->t.getID()<<" "<<t->t.getState();
+                       //     t=t->next;
+                        //}
+                        //qDebug()<<endl;
+
+                        //qDebug()<<tmp->t.getID()<<" "<<tmp->t.getState();
+                        //更新users
+                        users.update(this->u);
+                        //更新goods
+                        Node<Good>* x=goods.gethead();
+                        while(x&&x->t.getID()!=tmp->t.getID()) x=x->next;
+                        if(x) x->t.setRemoveState();//找到相应商品并下架,一般都能找到
+                        QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
+
+                        break;
+                    }
+                    else break;
                 }
-                else break;
+                else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
+                {
+                    flag=true;
+                    QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
+                }
+                tmp=tmp->next;
             }
-            else if(tmp->t.getID()==r.getRemoveContent()&&tmp->t.getState()==false)//商品已被下架
-            {
-                flag=true;
-                QMessageBox::warning(this, tr("Warning"), tr("The commodity has been off sale!"),QMessageBox::Ok);
-            }
-            tmp=tmp->next;
-        }
 
-        if(!flag)
-        {
-            QMessageBox::warning(this, tr("Warning"), tr("The commodity ID doesn't exist!"),QMessageBox::Ok);
+            if(!flag)
+            {
+                QMessageBox::warning(this, tr("Warning"), tr("The commodity ID doesn't exist!"),QMessageBox::Ok);
+            }
+
+
         }
     }
+    this->checkCommodities();
 }
 
 void Seller::ModifyCommodities()
@@ -277,7 +305,7 @@ void Seller::handleTimeout()//不断更新数据实体
         tmp=tmp->next;
     }
 
-    this->u=tmp->t;
+    if(tmp!=NULL) this->u=tmp->t;
 
     cout<< "success update seller.user"<<endl;
 }

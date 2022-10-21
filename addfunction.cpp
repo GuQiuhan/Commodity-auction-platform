@@ -7,7 +7,7 @@ extern List<Good> goods;
 extern List<Order> orders;
 extern List<User> users;
 
-#define AuctionTime 180  //规定的拍卖时间，单位：秒，180秒即3分钟
+#define AuctionTime 420  //规定的拍卖时间，单位：秒,7min
 
 AddFunction::AddFunction(QWidget *parent) :
     QWidget(parent),
@@ -49,9 +49,6 @@ void AddFunction::handleTimeout()
                 break;
             }
         }//找到此商品的发布日期和数量
-        //qDebug()<<beginTime;
-        //qDebug()<<currentTime;
-        //qDebug()<<beginTime.secsTo(currentTime);
 
         if(beginTime.secsTo(currentTime)>AuctionTime)//超过了拍卖时间
         {
@@ -81,25 +78,29 @@ void AddFunction::handleTimeout()
            orders.push_back(final);
            //修改seller信息
            Node<User> * s=users.gethead();//在商品列表中找到要买的商品
-           while(1)
+           while(s!=NULL)
            {
                if(s->t.getid()==final.getSid()) break;
                s=s->next;
            }
-           s->t.addSellOrder(final);
-           s->t.inreaseBal(final.getprice()*final.getprice());
-
+           if(s)
+           {
+               s->t.addSellOrder(final);
+               s->t.inreaseBal(final.getprice()*final.getNumber());
+            }
            //修改buyer信息
            Node<User> * b=users.gethead();//在商品列表中找到要买的商品
-           while(1)
+           while(b)
            {
                if(b->t.getid()==final.getBid()) break;
                b=b->next;
            }
-           b->t.addBuyGood(i->t);
-           b->t.addBuyOrder(final);
-           //b->t.decreaseBal(final.getprice()*final.getprice());
-
+           if(b)
+           {
+               b->t.addBuyGood(i->t);
+               b->t.addBuyOrder(final);
+               //b->t.decreaseBal(final.getprice()*final.getprice());
+           }
            //修改good
            i->t.decrease(final.getNumber());
 
@@ -131,13 +132,15 @@ void AddFunction::handleTimeout()
                    //将每个拍卖的钱都归还给用户
                    //修改buyer信息
                    Node<User> * b=users.gethead();//在商品列表中找到要买的商品
-                   while(1)
+                   while(b)
                    {
                        if(b->t.getid()==cur->t.getOrder().getBid()) break;
                        b=b->next;
                    }
-                   b->t.inreaseBal(cur->t.getOrder().getprice()*cur->t.getOrder().getprice());
-
+                   if(b)
+                   {
+                        b->t.inreaseBal(cur->t.getOrder().getprice()*cur->t.getOrder().getNumber());
+                    }
                    cur=cur->next;
                    auctions.del(i);
                }

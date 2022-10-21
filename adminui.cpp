@@ -68,6 +68,7 @@ void AdminUI::on_comboBox_currentTextChanged(const QString &arg1)
     {
 
         this->removeUsers();
+
         //重新展示用户
         this->checkUsers();
     }
@@ -141,8 +142,10 @@ void AdminUI::checkUsers()
 
     Node<User> * cur=users.gethead();
 
-    QStandardItem* item = 0;
+    QStandardItem* item;
+
     for(int i = 0;i<users.getLen();++i){
+
         item = new QStandardItem(cur->t.getid());//括号里面是QString即可
         model->setItem(i,0,item);
         item = new QStandardItem(cur->t.getName());
@@ -315,15 +318,16 @@ void AdminUI::removeUsers()
                     reply = QMessageBox::question(this, "", "Sure to remove?",QMessageBox::Yes|QMessageBox::No);
                     if (reply == QMessageBox::Yes)
                     {
+                        QString id=tmp->t.getid();
+
                         users.del(i);//删除pos==i的用户
 
-                        //qDebug()<<"here" <<endl;
 
                         //更新goods文件,下架相应商品
                         Node<Good>* g=goods.gethead();
                         while(g)
                         {
-                            if(g->t.getSid()==tmp->t.getid())
+                            if(g->t.getSid()==id)
                             {
                                 g->t.setRemoveState();
                             }
@@ -331,12 +335,12 @@ void AdminUI::removeUsers()
                         }
 
                         QMessageBox::information(this, "Title", "Remove Successfully!");//提示成功
-
+                         break;
                     }
-                    break;
+                    else break;
                 }
 
-                tmp=tmp->next;
+                    tmp=tmp->next;
             }
 
             if(!flag)
@@ -345,4 +349,7 @@ void AdminUI::removeUsers()
             }
         }
     }
+
+
+    cout << "finish"<<endl;
 }
